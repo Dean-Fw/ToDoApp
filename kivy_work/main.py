@@ -1,15 +1,15 @@
 from kivymd.app import MDApp
-from kivymd.uix.label import MDLabel
 from kivy.lang.builder import Builder
-from kivy.uix.screenmanager import ScreenManager
+from kivymd.uix.boxlayout import MDBoxLayout
 
-class WindowManager(ScreenManager):
+class ContentNavigationDrawer(MDBoxLayout):
     pass
 
 
 class MainApp(MDApp):
     def build(self):
-        Builder.load_file("ToDo.kv")
-        return WindowManager()
+        self.theme_cls.theme_style = "Dark"
+        return Builder.load_file("ToDo.kv")
+
 
 MainApp().run()
