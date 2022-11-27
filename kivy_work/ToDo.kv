@@ -1,0 +1,9 @@
+<WindowManager>:
+	Screen:
+		MDTopAppBar
+			pos_hint: {"top":1}
+			title: "ToDo"
+			eleveation: 8
+			left_action_item: [["menu", lambda x: nav_drawer.set_state("open")]]
+		MDNavigationDrawer:
+			id: nav_drawer
