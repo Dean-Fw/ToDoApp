@@ -1,33 +1,41 @@
 <ContentNavigationDrawer>:
 
 	MDList:
-		OneLineListItem:
+		OneLineIconListItem:
 			text:"Home"
 			on_press:
 				root.nav_drawer.set_state("close")
 				root.screen_manager.current = "homeScreen"
-		OneLineListItem:
+			IconLeftWidget:
+				icon: "home"
+		OneLineIconListItem:
 			text:"My ToDo lists"
 			on_press:
 				root.nav_drawer.set_state("close")
 				root.screen_manager.current = "ToDoScreen"
-		OneLineListItem:
+			IconLeftWidget:
+				icon: "format-list-bulleted"
+		OneLineIconListItem:
 			text: "Calender"
 			on_press:
 				root.nav_drawer.set_state("close")
 				root.screen_manager.current = "calenderScreen"
-
-		OneLineListItem:
+			IconLeftWidget:
+				icon: "calendar"
+		OneLineIconListItem:
 			text: "Diary"
 			on_press:
 				root.nav_drawer.set_state("close")
 				root.screen_manager.current = "diaryScreen"
-
-		OneLineListItem:
+			IconLeftWidget:
+				icon: "book"
+		OneLineIconListItem:
 			text: "Settings"
 			on_press: 
 				root.nav_drawer.set_state("close")
 				root.screen_manager.current = "settingsScreen"
+			IconLeftWidget:
+				icon: "cog"
 MDScreen:
 	MDTopAppBar:
 		pos_hint: {"top": 1}
