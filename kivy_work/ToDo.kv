@@ -1,18 +1,78 @@
+<ContentNavigationDrawer>:
+
+	MDList:
+		OneLineListItem:
+			text:"Home"
+			on_press:
+				root.nav_drawer.set_state("close")
+				root.screen_manager.current = "homeScreen"
+		OneLineListItem:
+			text:"My ToDo lists"
+			on_press:
+				root.nav_drawer.set_state("close")
+				root.screen_manager.current = "ToDoScreen"
+		OneLineListItem:
+			text: "Calender"
+			on_press:
+				root.nav_drawer.set_state("close")
+				root.screen_manager.current = "calenderScreen"
+
+		OneLineListItem:
+			text: "Diary"
+			on_press:
+				root.nav_drawer.set_state("close")
+				root.screen_manager.current = "diaryScreen"
+
+		OneLineListItem:
+			text: "Settings"
+			on_press: 
+				root.nav_drawer.set_state("close")
+				root.screen_manager.current = "settingsScreen"
 MDScreen:
+	MDTopAppBar:
+		pos_hint: {"top": 1}
+		elevation: 4
+		title: "ToDo"
+		left_action_items:
+			[["menu", lambda x: nav_drawer.set_state("open")]]	
 	
 	MDNavigationLayout:
 		MDScreenManager:
+			id: screen_manager
+			
 			MDScreen:
-				MDTopAppBar:
-					title: "ToDo"
-					elevation: 4
-					pos_hint: {"top": 1}
-					left_action_items:
-						[["menu", lambda x: nav_drawer.set_state("open")]]
+				name: "homeScreen"
+				MDLabel:
+					text: "Home Screen"
+					halign: "center"
+	
+			MDScreen:
+				name: "ToDoView"
+				MDLabel:
+					text: "View of ToDoLists"
+					halign: "center"
+
+			MDScreen:
+				name: "calenderScreen"
+				MDLabel:
+					text: "Calender"
+					halign: "center"
+			MDScreen:
+				name: "diaryScreen"
+				MDLabel:
+					text: "Diary"
+					halign: "center"
+
+			MDScreen:
+				name: "settingsScreen"
+				MDLabel:
+					text: "Settings"
+					halign: "center"
 	MDNavigationDrawer:
 		id: nav_drawer
 		ContentNavigationDrawer:
-
+			screen_manager: screen_manager
+			nav_drawer: nav_drawer
 
 
 
