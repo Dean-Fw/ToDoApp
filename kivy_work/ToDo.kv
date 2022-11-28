@@ -8,6 +8,9 @@
 				root.screen_manager.current = "homeScreen"
 			IconLeftWidget:
 				icon: "home"
+				on_press:
+					root.nav_drawer.set_state("close")
+					root.screen_manager.current = "homeScreen"
 		OneLineIconListItem:
 			text:"My ToDo lists"
 			on_press:
@@ -15,6 +18,9 @@
 				root.screen_manager.current = "ToDoScreen"
 			IconLeftWidget:
 				icon: "format-list-bulleted"
+				on_press: 
+					root.nav_drawer.set_state("close")
+					root.screen_manager.current = "ToDoScreen"
 		OneLineIconListItem:
 			text: "Calender"
 			on_press:
@@ -22,6 +28,9 @@
 				root.screen_manager.current = "calenderScreen"
 			IconLeftWidget:
 				icon: "calendar"
+				on_press:
+					root.nav_drawer.set_state("close")
+					root.screen_manager.current = "calenderScreen"
 		OneLineIconListItem:
 			text: "Diary"
 			on_press:
@@ -29,6 +38,9 @@
 				root.screen_manager.current = "diaryScreen"
 			IconLeftWidget:
 				icon: "book"
+				on_press:
+					root.nav_drawer.set_state("close")
+					root.screen_manager.current = "diaryScreen"
 		OneLineIconListItem:
 			text: "Settings"
 			on_press: 
@@ -36,6 +48,9 @@
 				root.screen_manager.current = "settingsScreen"
 			IconLeftWidget:
 				icon: "cog"
+				on_press:
+					root.nav_drawer.set_state("close")
+					root.screen_manager.current = "settingsScreen"
 MDScreen:
 	MDTopAppBar:
 		pos_hint: {"top": 1}
