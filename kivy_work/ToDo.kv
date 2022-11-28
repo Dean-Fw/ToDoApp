@@ -76,8 +76,14 @@ MDScreen:
 					halign: "center"
 				MDFloatingActionButton:
 					icon: "plus"
-				#	type: type_button
 					pos_hint: {"right": 1}
+					on_release:
+						screen_manager.current = "ToDo-CreateList-Screen"	
+			MDScreen:
+				name: "ToDo-CreateList-Screen"
+				MDLabel:
+					text: "Create a ToDo list!"
+					halign: "center"
 			MDScreen:
 				name: "calenderScreen"
 				MDLabel:
@@ -94,6 +100,7 @@ MDScreen:
 				MDLabel:
 					text: "Settings"
 					halign: "center"
+			
 	MDNavigationDrawer:
 		id: nav_drawer
 		ContentNavigationDrawer:
