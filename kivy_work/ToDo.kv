@@ -51,8 +51,36 @@
 				on_press:
 					root.nav_drawer.set_state("close")
 					root.screen_manager.current = "settingsScreen"
+
+<ToDoListCreation>:
+	MDBoxLayout:
+		orientation: "vertical"
+		padding: 10, 50, 10, 10
+		MDLabel:
+			text: "Create a ToDo list!"
+			halign: "center"
+			font_size: dp(20)
+			size_hint: 1,None
+			size: self.width, self.height
+			pos_hint: {"top": 0.5 + self.height/2}	
+		MDTextField:
+			hint_text: "Enter a name for your ToDo list!"
+			halign: "center"
+			font_size: dp(20)
+		MDGridLayout:
+			cols: 3
+			MDRaisedButton:
+				text: "Discard ToDo list"
+				pos_hint_x: {"left":1}
+			Widget:
+			MDRaisedButton:
+				text: "Save ToDo list"
+				pos_hint_x: {"right":1}
+
+
 MDScreen:
 	MDTopAppBar:
+		id: ToolBar
 		pos_hint: {"top": 1}
 		elevation: 4
 		title: "ToDo"
@@ -79,11 +107,9 @@ MDScreen:
 					pos_hint: {"right": 1}
 					on_release:
 						screen_manager.current = "ToDo-CreateList-Screen"	
-			MDScreen:
+			MDScreen:	
 				name: "ToDo-CreateList-Screen"
-				MDLabel:
-					text: "Create a ToDo list!"
-					halign: "center"
+				ToDoListCreation:
 			MDScreen:
 				name: "calenderScreen"
 				MDLabel:
