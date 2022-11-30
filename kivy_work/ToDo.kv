@@ -64,18 +64,40 @@
 			size: self.width, self.height
 			pos_hint: {"top": 0.5 + self.height/2}	
 		MDTextField:
+			id: listNameField
 			hint_text: "Enter a name for your ToDo list!"
 			halign: "center"
 			font_size: dp(20)
 		MDGridLayout:
 			cols: 3
 			MDRaisedButton:
+				id: discardBut
 				text: "Discard ToDo list"
 				pos_hint_x: {"left":1}
+				on_press:
+					root.screen_manager.current = "ToDoScreen"
 			Widget:
 			MDRaisedButton:
+				id: saveBut
 				text: "Save ToDo list"
 				pos_hint_x: {"right":1}
+				on_press:
+					root.saveTask()
+
+<ToDoScreen>:
+	MDBoxLayout:
+		oreintation: "vertical"			
+		padding: 10,10,10,10
+		ScrollView:
+			MDList:
+				id: ListOfToDoLists
+		MDFloatingActionButton:
+			icon: "plus"
+			pos_hint: {"right": 1}
+			on_release:
+				root.screen_manager.current = "ToDo-CreateList-Screen"	
+
+	
 
 
 MDScreen:
@@ -99,17 +121,12 @@ MDScreen:
 	
 			MDScreen:
 				name: "ToDoScreen"
-				MDLabel:
-					text: "View of ToDoLists"
-					halign: "center"
-				MDFloatingActionButton:
-					icon: "plus"
-					pos_hint: {"right": 1}
-					on_release:
-						screen_manager.current = "ToDo-CreateList-Screen"	
+				ToDoScreen:
+					screen_manager: screen_manager
 			MDScreen:	
 				name: "ToDo-CreateList-Screen"
 				ToDoListCreation:
+					screen_manager: screen_manager
 			MDScreen:
 				name: "calenderScreen"
 				MDLabel:
