@@ -1,0 +1,68 @@
+from kivymd.app import MDApp
+from kivy.lang import Builder
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.pickers import MDDatePicker
+from kivymd.uix.list import TwoLineAvatarIconListItem, ILeftBodyTouch
+from kivymd.uix.selectioncontrol import MDCheckbox
+from datetime import datetime
+
+class ListItemWithCheckbox(TwoLineAvatarIconListItem):
+    def mark(self, check, list_item):
+        if check.active == True: # when a checkbox is ticked
+            list_item.text = "[s]"+list_item.text+"[/s]" # add strike through format to completed tasks
+        else:
+            pass
+    
+    def delete_item(self, list_item):
+        self.parent.remove_widget(list_item)
+
+class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
+    pass
+
+class DialogContent(MDBoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.ids.date_text.text = str(datetime.now().strftime("%A %d %B %Y")) # set date text to todays date when user 
+        # %A = Week Day, %d = Day, %B = Month name, %Y = Year
+    def show_date_picker(self):
+        date_dialog = MDDatePicker() #instantiate date picker widget
+        date_dialog.bind(on_save=self.on_save) #bind the date picker to a function that saves content
+        date_dialog.open() # open the dialog 
+
+    def on_save(self, instance, value, date_range):
+        date = value.strftime("%A %d %B %Y") 
+        self.ids.date_text.text = str(date)
+    
+
+class ToDoListPage(MDFloatLayout):
+    task_list_dialog = None
+    def show_task_dialog(self):
+        if not self.task_list_dialog: # if a dialog does not exits 
+            self.task_list_dialog = MDDialog ( # define one 
+                title="Create Task",
+                type="custom",
+                content_cls=DialogContent()
+            )
+        self.task_list_dialog.open() # open the dialog 
+    
+    def close_dialog(self):
+        self.task_list_dialog.dismiss()
+
+    def add_task(self, task, task_date):
+        print(task.text, task_date)
+        self.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task.text+"[/b]", secondary_text=task_date))
+        task.text = ""
+
+class MainApp(MDApp):
+    def build(self):
+        # Setting theme to my favorite theme
+        self.theme_cls.theme_style = "Dark"
+        return Builder.load_file("styling.kv")
+
+    
+
+if __name__ == '__main__':
+    app = MainApp()
+    app.run()
