@@ -13,7 +13,7 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         if check.active == True: # when a checkbox is ticked
             list_item.text = "[s]"+list_item.text+"[/s]" # add strike through format to completed tasks
         else:
-            pass
+            list_item.text = list_item.text.replace("[s]", "").replace("[/s]","") # remove strike through markup
     
     def delete_item(self, list_item):
         self.parent.remove_widget(list_item)
