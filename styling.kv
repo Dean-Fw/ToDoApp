@@ -38,29 +38,25 @@
 
 <DialogContent>:
     orientation: "vertical"
-    spacing: "10dp"
+    padding: "20dp"
     size_hint: 1, None
-    height: "130dp"
+    height: "200dp"
 
-    GridLayout:
+    MDTextField:
+        id: task_text
+        hint_text: "Add Task..."
+        pos_hint: {"center_y": .4}
+        max_text_length: 50
+        on_text_validate: (app.root.add_task(task_text, date_text.text), app.root.close_dialog())
+	
+	GridLayout:
         rows: 1
-
-        MDTextField:
-            id: task_text
-            hint_text: "Add Task..."
-            pos_hint: {"center_y": .4}
-            max_text_length: 50
-            on_text_validate: (app.root.add_task(task_text, date_text.text), app.root.close_dialog())
-
-        MDIconButton:
-            icon: 'calendar'
-            on_release: root.show_date_picker()
-            padding: '10dp'
-
-    MDLabel:
-        spacing: '10dp'
-        id: date_text
-
+    	MDRectangleFlatIconButton:
+			icon: 'calendar'
+    	    text: 'Add a Deadline'
+    	    on_release: root.show_date_picker()
+    	MDLabel:
+    	    id: date_text
     BoxLayout:
         orientation: 'horizontal'
 

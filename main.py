@@ -24,7 +24,7 @@ class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
 class DialogContent(MDBoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.ids.date_text.text = str(datetime.now().strftime("%A %d %B %Y")) # set date text to todays date when user 
+        self.ids.date_text.text = str("") # set date text to todays date when user 
         # %A = Week Day, %d = Day, %B = Month name, %Y = Year
     def show_date_picker(self):
         date_dialog = MDDatePicker() #instantiate date picker widget
@@ -54,6 +54,7 @@ class ToDoListPage(MDFloatLayout):
         print(task.text, task_date)
         self.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task.text+"[/b]", secondary_text=task_date))
         task.text = ""
+        task_date.text = ""
 
 class MainApp(MDApp):
     def build(self):
