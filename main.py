@@ -28,7 +28,9 @@ class ToDoListView(Screen):
     def add_task(self, task):
         print(task.text)
         self.parent.add_widget(ToDoListPage(name=str(task.text)))
-        self.ids["Container"].add_widget(ListItemWithoutCheckbox(text="[b]" + task.text + "[/b]",))
+        list_without_checkbox = ListItemWithoutCheckbox(text="[b]" + task.text + "[/b]")
+        list_without_checkbox.bind(on_release= lambda x : self.change_screen(task.text))
+        self.ids["Container"].add_widget(list_without_checkbox)
         task.text = ""
     
     def change_screen(self, list_name):
