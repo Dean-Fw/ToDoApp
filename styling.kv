@@ -77,7 +77,6 @@
 			halign: "left"
 			padding: [10,0]
 			markup: True
-			text: "[u][size=32][b]ToDo list name[/b][/size][/u]"
 			pos_hint: {"y": .45}
 
 		ScrollView:
@@ -86,6 +85,12 @@
 
 			MDList:
 				id: Container
+
+		MDRectangleFlatIconButton:
+			icon: "keyboard-backspace"
+			text: "Return to ToDo list view"
+			pos_hint: {"x": .05, "y":.05}
+			on_release: app.root.current = "ListView"
 
 		MDFloatingActionButton:
 			icon: "plus-thick"
@@ -104,7 +109,7 @@
         hint_text: "Add Task..."
         pos_hint: {"center_y": .4}
         max_text_length: 50
-        on_text_validate: (app.root.add_task(task_text, date_text), app.root.close_dialog())
+        on_text_validate: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
 	
 	GridLayout:
         rows: 1
@@ -119,9 +124,9 @@
 
         MDRaisedButton:
             text: "SAVE"
-            on_release: (app.root.add_task(task_text, date_text), app.root.close_dialog())
+            on_release: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
         MDFlatButton:
             text: 'CANCEL'
-            on_release: app.root.close_dialog()
+            on_release: app.root.current_screen.close_dialog()
 
 

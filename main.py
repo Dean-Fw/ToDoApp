@@ -31,11 +31,10 @@ class ToDoListView(Screen):
         list_without_checkbox = ListItemWithoutCheckbox(text="[b]" + task.text + "[/b]")
         list_without_checkbox.bind(on_release= lambda x : self.change_screen(task.text))
         self.ids["Container"].add_widget(list_without_checkbox)
-        task.text = ""
     
     def change_screen(self, list_name):
+        self.parent.get_screen(list_name).ids.ToDoListName.text = "[u][size=32][b]" + list_name + "[/b][/size][/u]"
         self.parent.current = list_name
-
 
 class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
     def delete_item(self, list_item):
