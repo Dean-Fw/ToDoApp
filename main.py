@@ -1,12 +1,48 @@
 from kivymd.app import MDApp
 from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.pickers import MDDatePicker
-from kivymd.uix.list import TwoLineAvatarIconListItem, ILeftBodyTouch
+from kivymd.uix.list import TwoLineAvatarIconListItem, ILeftBodyTouch, OneLineAvatarIconListItem
 from kivymd.uix.selectioncontrol import MDCheckbox
 from datetime import datetime
+
+'''Code for Creation and viewing of multiple ToDoLists'''
+
+class ToDoListView(Screen):
+    task_list_dialog = None
+    def show_task_dialog(self):
+        if not self.task_list_dialog: # if a dialog does not exits 
+            self.task_list_dialog = MDDialog ( # define one 
+                title="Create a ToDo list",
+                type="custom",
+                content_cls=CreateListDialog()
+            )
+        self.task_list_dialog.open() # open the dialog 
+    
+    def close_dialog(self):
+        self.task_list_dialog.dismiss()
+
+    def add_task(self, task):
+        print(task.text)
+        self.parent.add_widget(ToDoListPage(name=str(task.text)))
+        self.ids["Container"].add_widget(ListItemWithoutCheckbox(text="[b]" + task.text + "[/b]",))
+        task.text = ""
+    
+    def change_screen(self, list_name):
+        self.parent.current = list_name
+
+
+class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
+    def delete_item(self, list_item):
+        self.parent.remove_widget(list_item)
+
+class CreateListDialog(MDBoxLayout):
+    pass
+
+'''Code For Individual ToDo List pages'''
 
 class ListItemWithCheckbox(TwoLineAvatarIconListItem):
     def mark(self, check, list_item):
@@ -35,8 +71,7 @@ class DialogContent(MDBoxLayout):
         date = value.strftime("%A %d %B %Y") 
         self.ids.date_text.text = str(date)
     
-
-class ToDoListPage(MDFloatLayout):
+class ToDoListPage(Screen):
     task_list_dialog = None
     def show_task_dialog(self):
         if not self.task_list_dialog: # if a dialog does not exits 
@@ -51,8 +86,8 @@ class ToDoListPage(MDFloatLayout):
         self.task_list_dialog.dismiss()
 
     def add_task(self, task, task_date):
-        print(task.text, task_date)
-        self.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task.text+"[/b]", secondary_text=task_date))
+        print(task.text, task_date.text)
+        self.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task.text+"[/b]", secondary_text=task_date.text))
         task.text = ""
         task_date.text = ""
 
@@ -60,9 +95,10 @@ class MainApp(MDApp):
     def build(self):
         # Setting theme to my favorite theme
         self.theme_cls.theme_style = "Dark"
-        return Builder.load_file("styling.kv")
-
-    
+        Builder.load_file("styling.kv")
+        sm = ScreenManager()
+        sm.add_widget(ToDoListView(name="ListView"))
+        return sm
 
 if __name__ == '__main__':
     app = MainApp()

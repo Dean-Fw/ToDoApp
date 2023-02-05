@@ -1,7 +1,63 @@
+# ToDo List view Styling
+<ToDoListView>:
+	MDFloatLayout:
+		MDLabel:
+			id: title
+			halign: "left"
+			padding: [10,0]
+			markup: True
+			text: "[u][size=32][b]Your ToDo lists[/b][/size][/u]"
+			pos_hint: {"y": .45}
+		
+		ScrollView:
+			pos_hint: {"center_y": .5, "center_x": .5}
+			size_hint: .9, .8
+	
+			MDList:
+				id: Container
+			
+		MDFloatingActionButton:
+			icon: "plus-thick"
+			on_release: root.show_task_dialog()
+			elevation_noraml: 10
+			pos_hint: {"x": .9, "y":.05}
+
+<CreateListDialog>:
+	orientation: "vertical"
+	padding: "20dp"
+	size_hint: 1, None
+	height: "130dp"
+
+	MDTextField:
+		id: list_text
+		hint_text: "Name ToDo list..."
+		pos_hint: {"center_y": .4}
+        max_text_length: 50
+		on_text_validate: (app.root.get_screen("ListView").add_task(list_text), app.root.get_screen("ListView").close_dialog())
+
+	BoxLayout:
+        orientation: 'horizontal'
+
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: (app.root.get_screen("ListView").add_task(list_text), app.root.get_screen("ListView").close_dialog())
+        MDFlatButton:
+            text: 'CANCEL'
+            on_release: app.root.get_screen("ListView").close_dialog()
+
+<ListItemWithoutCheckbox>:
+	id: list_item
+	IconRightWidget:
+		icon: "trash-can-outline"
+		theme_text_color: "Custom"
+		text_color: 1,0,0,1
+		on_release:
+			root.delete_item(list_item)
+
+# Individual ToDo List Styling
 <ListItemWithCheckbox>:
 	id: list_item
 	markup: True
-
 	LeftCheckbox:
 		id: check
 		on_release:
@@ -15,26 +71,27 @@
 			root.delete_item(list_item)
 
 <ToDoListPage>:
-	MDLabel:
-		id: ToDoListName
-		halign: "left"
-		padding: [10,0]
-		markup: True
-		text: "[u][size=32][b]ToDo list name[/b][/size][/u]"
-		pos_hint: {"y": .45}
-	
-	ScrollView:
-		pos_hint: {"center_y": .5, "center_x": .5}
-		size_hint: .9, .8
+	MDFloatLayout:
+		MDLabel:
+			id: ToDoListName
+			halign: "left"
+			padding: [10,0]
+			markup: True
+			text: "[u][size=32][b]ToDo list name[/b][/size][/u]"
+			pos_hint: {"y": .45}
 
-		MDList:
-			id: Container
-		
-	MDFloatingActionButton:
-		icon: "plus-thick"
-		on_release: root.show_task_dialog()
-		elevation_noraml: 10
-		pos_hint: {"x": .9, "y":.05}
+		ScrollView:
+			pos_hint: {"center_y": .5, "center_x": .5}
+			size_hint: .9, .8
+
+			MDList:
+				id: Container
+
+		MDFloatingActionButton:
+			icon: "plus-thick"
+			on_release: root.show_task_dialog()
+			elevation_noraml: 10
+			pos_hint: {"x": .9, "y":.05}
 
 <DialogContent>:
     orientation: "vertical"
@@ -47,7 +104,7 @@
         hint_text: "Add Task..."
         pos_hint: {"center_y": .4}
         max_text_length: 50
-        on_text_validate: (app.root.add_task(task_text, date_text.text), app.root.close_dialog())
+        on_text_validate: (app.root.add_task(task_text, date_text), app.root.close_dialog())
 	
 	GridLayout:
         rows: 1
@@ -62,9 +119,9 @@
 
         MDRaisedButton:
             text: "SAVE"
-            on_release: (app.root.add_task(task_text, date_text.text), app.root.close_dialog())
+            on_release: (app.root.add_task(task_text, date_text), app.root.close_dialog())
         MDFlatButton:
             text: 'CANCEL'
             on_release: app.root.close_dialog()
 
-ToDoListPage:
+
