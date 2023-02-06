@@ -1,0 +1,7 @@
+Adjust date text on task creation, date is too close and out of line with the add a dead line button.
+
+Adjust the text of tasks without secondary text, the text appears too low against the checkbox
+
+BUG: upon creating a new list, previous lists are no longer accessible. Possibly due to 'task.text' changing?? Even upon of latest list the screen is not removed. FIXED WOOOOOOOO!!!!!!!!!!!!!
+
+Make sure ToDolist screens are being removed on deletion. DONE !!!!!!!!
