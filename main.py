@@ -26,23 +26,23 @@ class ToDoListView(Screen):
         self.task_list_dialog.dismiss()
 
     def add_task(self, task):
-        print(task.text)
+        print(f"Creating list: {task.text}")
         list_without_checkbox = ListItemWithoutCheckbox(text="[b]" + task.text + "[/b]")
         
         self.parent.add_widget(ToDoListPage(name=str(list_without_checkbox.text)))
         list_without_checkbox.bind(on_release= lambda x : self.change_screen(list_without_checkbox.text))
         self.ids["Container"].add_widget(list_without_checkbox)
-    
+        task.text = "" 
     def change_screen(self, list_name):
         self.parent.get_screen(list_name).ids.ToDoListName.text = "[u][size=32][b]" + list_name + "[/b][/size][/u]"
         self.parent.current = list_name
-        print(self.parent.current)
+        print(f"Changing screen to: {self.parent.current}")
 
 class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
     def delete_item(self, list_item):
         app = MDApp.get_running_app() # create instance of running app
         self.parent.remove_widget(list_item) # remove item from the list 
-        print(list_item.text)
+        print(f"Removing Screen: {list_item.text}")
         app.root.remove_widget(ToDoListPage(name=list_item.text)) # delete the screen
 
 class CreateListDialog(MDBoxLayout):
@@ -92,10 +92,12 @@ class ToDoListPage(Screen):
         self.task_list_dialog.dismiss()
 
     def add_task(self, task, task_date):
-        print(task.text, task_date.text)
+        print(f"Creating task: {task.text, task_date.text}")
         self.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task.text+"[/b]", secondary_text=task_date.text))
         task.text = ""
         task_date.text = ""
+
+'''Main application'''
 
 class MainApp(MDApp):
     def build(self):
