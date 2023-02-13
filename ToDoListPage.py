@@ -4,6 +4,11 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.pickers import MDDatePicker
 from kivy.uix.screenmanager import Screen
+from jsonExperiment import JsonData
+
+
+
+
 
 class ListItemWithCheckbox(TwoLineAvatarIconListItem):
     # Allows users to complete tasks and see them crossed out 
@@ -55,7 +60,12 @@ class ToDoListPage(Screen):
     
     # Takes information from dialog box and creates a list item from it
     def add_task(self, task, task_date):
+        json_data_obj = JsonData("data.json")
         print(f"Creating task: {task.text, task_date.text}")
         self.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task.text+"[/b]", secondary_text=task_date.text))
+        parent_list = self.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[size=32]", "").replace("[/size]","").replace("[b]", "").replace("[/b]","")
+        print(parent_list)
+        task_json = {"task_name":task.text, "completed":False, "task_date": task_date.text}
+        json_data_obj.append_new_task(task_json, parent_list)
         task.text = ""
         task_date.text = ""

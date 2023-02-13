@@ -46,6 +46,7 @@ class JsonData:
     def append_new_list(self, new_list):
         self.data["lists"].append(new_list)
         self.save_changes("r+")
+        self.data = self.open_and_load_JSON()
 
     def remove_list(self, list_name):
         for i in range(len(self.data["lists"])):
@@ -56,8 +57,12 @@ class JsonData:
     def append_new_task(self, new_task, parent_list):
         for i in range(len(self.data["lists"])):
             if self.data["lists"][i]["list_name"] == parent_list:
+                print(f"Parent list found: {parent_list}")
                 self.data["lists"][i]["tasks"].append(new_task)
+            else:
+                print(f"list not found: {parent_list}")
         self.save_changes("w")
+        self.data = self.open_and_load_JSON()
 
     def remove_task(self, task_to_remove, parent_list):
         for i in range(len(self.data["lists"])):
@@ -74,9 +79,11 @@ def main():
     #new_list = {"list_name":"school tasks", "tasks":[{"task_name":"Do Homework","completed":False}]}
     #json_data_obj.append_new_list(new_list) 
 
-    #new_task = {"task_name": "do laundry", "completed": False}
-    #json_data_obj.append_new_task(new_task, "home tasks")
-    json_data_obj.remove_task("do laundry", "home tasks")
+    new_task = {"task_name": "do laundry", "completed": False}
+    json_data_obj.append_new_task(new_task, "home tasks")
+    
+    #json_data_obj.remove_task("do laundry", "home tasks")
+    
     loaded_lists = json_data_obj.load_data()
      
     for i in loaded_lists:
