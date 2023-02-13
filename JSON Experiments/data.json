@@ -24,15 +24,6 @@
                     "completed": false
                 }
             ]
-        },
-        {
-            "list_name": "school tasks",
-            "tasks": [
-                {
-                    "task_name": "Do Homework",
-                    "completed": false
-                }
-            ]
         }
     ]
 }
