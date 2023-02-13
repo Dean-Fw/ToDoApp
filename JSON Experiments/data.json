@@ -1,29 +1,38 @@
 {
-	"lists":[	
-		{
-			"list_name":"home tasks",	
-			"tasks":[
-				{
-					"task_name":"cook",
-					"completed":false
-				},
-				{
-					"task_name":"clean",
-					"completed":true,
-					"task_day": 23,
-					"task_month": 12,
-					"task_year": 2023
-				}
-			]		
-		},
-		{	
-			"list_name":"work tasks",
-			"tasks":[
-				{
-					"task_name":"Fill reports",
-					"completed":false
-				}
-			]
-		}
-	]
-}		
+    "lists": [
+        {
+            "list_name": "home tasks",
+            "tasks": [
+                {
+                    "task_name": "cook",
+                    "completed": false
+                },
+                {
+                    "task_name": "clean",
+                    "completed": true,
+                    "task_day": 23,
+                    "task_month": 12,
+                    "task_year": 2023
+                }
+            ]
+        },
+        {
+            "list_name": "work tasks",
+            "tasks": [
+                {
+                    "task_name": "Fill reports",
+                    "completed": false
+                }
+            ]
+        },
+        {
+            "list_name": "school tasks",
+            "tasks": [
+                {
+                    "task_name": "Do Homework",
+                    "completed": false
+                }
+            ]
+        }
+    ]
+}
