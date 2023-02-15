@@ -9,24 +9,11 @@
                 },
                 {
                     "task_name": "clean",
-                    "completed": true,
-                    "task_day": 23,
-                    "task_month": 12,
-                    "task_year": 2023
+                    "completed": true
                 },
                 {
                     "task_name": "do laundry",
                     "completed": true
-                }
-            ]
-        },
-        {
-            "list_name": "car",
-            "tasks": [
-                {
-                    "task_name": "car",
-                    "completed": false,
-                    "task_date": ""
                 }
             ]
         }
