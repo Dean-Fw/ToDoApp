@@ -4,11 +4,7 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.pickers import MDDatePicker
 from kivy.uix.screenmanager import Screen
-from jsonExperiment import JsonData
-
-
-
-
+from JSON_Interface import JsonData
 
 class ListItemWithCheckbox(TwoLineAvatarIconListItem):
     # Allows users to complete tasks and see them crossed out 
@@ -20,6 +16,8 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
     # Allows for the deletion of item upon clcking the "bin icon"
     def delete_item(self, list_item):
         self.parent.remove_widget(list_item)
+        json_data_obj = JsonData("data.json")
+        json_data_obj.remove_task()
 
 # Checkbox for list items 
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):

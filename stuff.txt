@@ -1,7 +1,0 @@
-Adjust date text on task creation, date is too close and out of line with the add a dead line button.
-
-Adjust the text of tasks without secondary text, the text appears too low against the checkbox
-
-Create date widget.
-    - have properties for it's date and what tasks are being held in it.
-
