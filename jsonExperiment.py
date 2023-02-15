@@ -1,15 +1,5 @@
 import json
 
-# class to store and display data for a todo list object
-class ToDoList:
-    
-    def __init__(self, ListName, Tasks):
-        self.list_name = ListName
-        self.tasks = Tasks
-    
-    def print_data(self):
-        print(f"List Name: {self.list_name}\n Tasks: \n     {self.tasks}\n")
-
 # method to open and load data from a JSON file        
 class JsonData:
     
@@ -29,14 +19,7 @@ class JsonData:
         except:
             print("ERROR: Could not open JSON file")
             exit()
-    
-    def load_data(self):
-        ToDo_lists = []
-        for i in self.data["lists"]:
-            saved_list = ToDoList(i["list_name"],i["tasks"])
-            ToDo_lists.append(saved_list)
-        return ToDo_lists
-    
+       
     def save_changes(self, type_of_change):
             with open(self.file_path, type_of_change) as f:
                 f.seek(0)
@@ -49,9 +32,15 @@ class JsonData:
         self.data = self.open_and_load_JSON()
 
     def remove_list(self, list_name):
-        for i in range(len(self.data["lists"])):
-            if self.data["lists"][i]["list_name"] == list_name:
-                del self.data["lists"][i]
+        length = len(self.data["lists"])
+        print(f"total len of lists thing: {length}")
+        count = 0
+        for i in self.data["lists"]:
+            print(i)
+            if i["list_name"] == list_name:                
+                del self.data["lists"][count]
+                break
+            count += 1
         self.save_changes("w")
 
     def append_new_task(self, new_task, parent_list):
@@ -79,15 +68,11 @@ def main():
     #new_list = {"list_name":"school tasks", "tasks":[{"task_name":"Do Homework","completed":False}]}
     #json_data_obj.append_new_list(new_list) 
 
-    new_task = {"task_name": "do laundry", "completed": False}
-    json_data_obj.append_new_task(new_task, "home tasks")
+    #new_task = {"task_name": "do laundry", "completed": False}
+    #json_data_obj.append_new_task(new_task, "home tasks")
     
     #json_data_obj.remove_task("do laundry", "home tasks")
-    
-    loaded_lists = json_data_obj.load_data()
-     
-    for i in loaded_lists:
-        print(f"List Name: {i.list_name} \n Tasks:\n    {i.tasks}\n")
+
     
     
     

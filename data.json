@@ -17,42 +17,8 @@
                 {
                     "task_name": "do laundry",
                     "completed": false
-                },
-                {
-                    "task_name": "do laundry",
-                    "completed": false
-                },
-                {
-                    "task_name": "do laundry",
-                    "completed": false
-                },
-                {
-                    "task_name": "do laundry",
-                    "completed": false
-                },
-                {
-                    "task_name": "do laundry",
-                    "completed": false
-                },
-                {
-                    "task_name": "do laundry",
-                    "completed": false
-                },
-                {
-                    "task_name": "do laundry",
-                    "completed": false
-                }
-            ]
-        },
-        {
-            "list_name": "work tasks",
-            "tasks": [
-                {
-                    "task_name": "Fill reports",
-                    "completed": false
                 }
             ]
         }
-
     ]
 }
