@@ -12,10 +12,7 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         
     # Allows users to complete tasks and see them crossed out 
     def mark(self, check, list_item):
-        listObject = self.parent
-        scrollViewObject = listObject.parent
-        floatLayoutObject = scrollViewObject.parent
-        ScreenObject = floatLayoutObject.parent # This is the ugliest most stupidest most dumbest solution, but it's all i got :/
+        ScreenObject = self.parent.parent.parent.parent # This is almost the ugliest most stupidest most dumbest solution, but it's all i got :/
         print(ScreenObject.name)
         if check.active == True: # when a checkbox is ticked
             list_item.text = "[s]"+list_item.text+"[/s]" # add strike through format to completed tasks
@@ -24,12 +21,10 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         
         json_data_obj = JsonData("data.json")
         json_data_obj.complete_task(list_item.text.replace("[b]", "").replace("[/b]", "").replace("[s]", "").replace("[/s]",""), ScreenObject.name.replace("[b]", "").replace("[/b]", ""))
+
     # Allows for the deletion of item upon clcking the "bin icon"
     def delete_item(self, list_item):
-        listObject = self.parent
-        scrollViewObject = listObject.parent
-        floatLayoutObject = scrollViewObject.parent
-        ScreenObject = floatLayoutObject.parent # This is the ugliest most stupidest most dumbest solution, but it's all i got :/
+        ScreenObject = self.parent.parent.parent.parent # This is the ugliest most stupidest most dumbest solution, but it's all i got :/
 
         json_data_obj = JsonData("data.json")
         json_data_obj.remove_task(list_item.text.replace("[b]", "").replace("[/b]", ""), ScreenObject.name.replace("[b]", "").replace("[/b]", ""))
