@@ -27,7 +27,13 @@
         },
         {
             "list_name": "List 3",
-            "tasks": []
+            "tasks": [
+                {
+                    "task_name": "New task (complete)",
+                    "completed": true,
+                    "task_date": ""
+                }
+            ]
         }
     ]
 }

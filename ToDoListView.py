@@ -11,9 +11,9 @@ from functools import partial
 class ToDoListView(Screen):
     def __init__(self, sm,**kw):
         super().__init__(**kw)
-        Clock.schedule_once(partial(self.load_tasks, sm)) 
+        Clock.schedule_once(partial(self.load_lsits, sm)) 
     ''' Methods for loading tasks from JSON file to screen'''
-    def load_tasks(self, sm, *largs):
+    def load_lsits(self, sm, *largs):
         json_data_object = JsonData("data.json")
         self.loaded_items = []
 
@@ -25,6 +25,7 @@ class ToDoListView(Screen):
 
     def bind_on_release_to_loaded_item(self, sm, loaded_item):
         self.manager.add_widget(ToDoListPage(name = loaded_item.text))
+        self.manager.get_screen(loaded_item.text).ids.ToDoListName.text = loaded_item.text
         loaded_item.bind(on_release= lambda x: self.change_screen(loaded_item.text))
     
     def add_loaded_item_to_list(self, loaded_item):
