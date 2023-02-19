@@ -23,6 +23,7 @@ class JsonData:
        
     def save_changes(self, type_of_change):
             with open(self.file_path, type_of_change) as f:
+                print("--- JSON FILE SAVED ---")
                 f.seek(0)
                 json.dump(self.data, f, indent = 4)
                 f.flush()

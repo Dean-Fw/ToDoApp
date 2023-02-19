@@ -5,17 +5,17 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.pickers import MDDatePicker
 from kivy.uix.screenmanager import Screen
 from JSON_Interface import JsonData
+from functools import partial
+from kivy.clock import Clock
 
 class ListItemWithCheckbox(TwoLineAvatarIconListItem):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs) 
-        
+    
+    
     # Allows users to complete tasks and see them crossed out 
     def mark(self, check, list_item):
-        listObject = self.parent
-        scrollViewObject = listObject.parent
-        floatLayoutObject = scrollViewObject.parent
-        ScreenObject = floatLayoutObject.parent # This is the ugliest most stupidest most dumbest solution, but it's all i got :/
+        ScreenObject = self.parent.parent.parent.parent # This is almost the ugliest most stupidest most dumbest solution, but it's all i got :/
         print(ScreenObject.name)
         if check.active == True: # when a checkbox is ticked
             list_item.text = "[s]"+list_item.text+"[/s]" # add strike through format to completed tasks
@@ -24,12 +24,10 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         
         json_data_obj = JsonData("data.json")
         json_data_obj.complete_task(list_item.text.replace("[b]", "").replace("[/b]", "").replace("[s]", "").replace("[/s]",""), ScreenObject.name.replace("[b]", "").replace("[/b]", ""))
+
     # Allows for the deletion of item upon clcking the "bin icon"
     def delete_item(self, list_item):
-        listObject = self.parent
-        scrollViewObject = listObject.parent
-        floatLayoutObject = scrollViewObject.parent
-        ScreenObject = floatLayoutObject.parent # This is the ugliest most stupidest most dumbest solution, but it's all i got :/
+        ScreenObject = self.parent.parent.parent.parent # This is the ugliest most stupidest most dumbest solution, but it's all i got :/
 
         json_data_obj = JsonData("data.json")
         json_data_obj.remove_task(list_item.text.replace("[b]", "").replace("[/b]", ""), ScreenObject.name.replace("[b]", "").replace("[/b]", ""))
@@ -60,6 +58,29 @@ class DialogContent(MDBoxLayout):
 
 # Main screen for creating and managing list items 
 class ToDoListPage(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        Clock.schedule_once(partial(self.load_tasks))
+    
+    def load_tasks(self, *largs):
+        jsonDataObject = JsonData("data.json")
+        parent_list_index = jsonDataObject.find_list(self.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[size=32]","").replace("[/size]","").replace("[b]","").replace("[/b]", ""))
+        print(f"found parent list index: {parent_list_index}")
+
+        for i in jsonDataObject.data["lists"][parent_list_index]["tasks"]:
+            loaded_task = ListItemWithCheckbox(text= "[b]" + i["task_name"] + "[/b]", secondary_text=i["task_date"])
+            print(loaded_task.ids)
+            loaded_task.ids.check.active = self.set_tick_box(i["completed"])
+            if loaded_task.ids.check.active:
+                loaded_task.text = "[s]" + loaded_task.text + "[/s]"
+            self.ids["Container"].add_widget(loaded_task)
+
+    def set_tick_box(self, complete):
+        if complete:
+            return True
+        return False
+
+    
     task_list_dialog = None
     # opens dialog box 
     def show_task_dialog(self):
