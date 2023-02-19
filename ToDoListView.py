@@ -5,25 +5,35 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import OneLineAvatarIconListItem
 from ToDoListPage import ToDoListPage
 from JSON_Interface import JsonData
+from kivy.clock import Clock
+from functools import partial
 
 class ToDoListView(Screen):
-    def __init__(self, **kw):
+    def __init__(self, sm,**kw):
         super().__init__(**kw)
+        Clock.schedule_once(partial(self.load_tasks, sm)) 
+    ''' Methods for loading tasks from JSON file to screen'''
+    def load_tasks(self, sm, *largs):
         json_data_object = JsonData("data.json")
-        # adds list item from JSON file to MDlist object 
-        for i in json_data_object.data["lists"]:
-            loaded_object = ListItemWithoutCheckbox(text="[b]" + i["list_name"] + "[/b]")
+        self.loaded_items = []
+
+        for i in json_data_object.data["lists"]: 
+            self.add_loaded_item_to_list(i)    
+
+        for i in self.loaded_items:
+            self.bind_on_release_to_loaded_item(sm, i) 
+
+    def bind_on_release_to_loaded_item(self, sm, loaded_item):
+        self.manager.add_widget(ToDoListPage(name = loaded_item.text))
+        loaded_item.bind(on_release= lambda x: self.change_screen(loaded_item.text))
+    
+    def add_loaded_item_to_list(self, loaded_item):
+            loaded_object = ListItemWithoutCheckbox(text="[b]" + loaded_item["list_name"] + "[/b]")
             self.ids["Container"].add_widget(loaded_object)
-
-            self.manager.add_widget(ToDoListPage(name=str(loaded_object.text)))
-            loaded_object.bind(on_release= lambda x : self.change_screen(loaded_object.text))
-
-    def load_tasks(self, object):
-        self.manager.add_widget(ToDoListPage(name=str(object.text)))
-        object.bind(on_release= lambda x : self.change_screen(object.text))
+            self.loaded_items.append(loaded_object)
 
     task_list_dialog = None
-    # Opens Dialog box that allows for the crration of classes 
+    # Opens Dialog box that allows for the creation of classes 
     def show_task_dialog(self): 
         if not self.task_list_dialog: # if a dialog does not exits 
             self.task_list_dialog = MDDialog ( # define one 
@@ -32,7 +42,7 @@ class ToDoListView(Screen):
                 content_cls=CreateListDialog()
             )
         self.task_list_dialog.open() # open the dialog 
-    
+
     # Closes dialog box 
     def close_dialog(self):
         self.task_list_dialog.dismiss()

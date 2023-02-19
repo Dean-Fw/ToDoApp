@@ -10,7 +10,7 @@ class MainApp(MDApp):
         self.theme_cls.theme_style = "Dark"
         Builder.load_file("styling.kv")
         sm = ScreenManager()
-        sm.add_widget(ToDoListView(name="ListView"))
+        sm.add_widget(ToDoListView(sm,name = "ListView"))
         return sm
 
 if __name__ == '__main__':
