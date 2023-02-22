@@ -63,7 +63,8 @@ class ToDoListView(Screen):
     
     # Allows for the changing of screens when a list item is pressed
     def change_screen(self, list_name):
-        self.parent.get_screen(list_name).ids.ToDoListName.text = "[u][size=32][b]" + list_name + "[/b][/size][/u]"
+        self.parent.get_screen(list_name).ids.ToDoListName.text = "[u][b]" + list_name + "[/b][/u]"
+        self.parent.get_screen(list_name).ids.ToDoListName.font_size = "32"
         self.parent.current = list_name
         print(f"Changing screen to: {self.parent.current}")
 
