@@ -22,12 +22,18 @@
                     "task_name": "Normal Task",
                     "completed": false,
                     "task_date": ""
+                },
+                {
+                    "task_name": "task",
+                    "completed": true,
+                    "task_date": ""
+                },
+                {
+                    "task_name": "Goop ",
+                    "completed": false,
+                    "task_date": "Saturday 15 April 2023"
                 }
             ]
-        },
-        {
-            "list_name": "OOpa Loopa",
-            "tasks": []
         }
     ]
 }
