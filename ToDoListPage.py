@@ -27,7 +27,7 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
 
     # Allows for the deletion of item upon clcking the "bin icon"
     def delete_item(self, list_item):
-        ScreenObject = self.parent.parent.parent.parent # This is the ugliest most stupidest most dumbest solution, but it's all i got :/
+        ScreenObject = self.parent.parent.parent.parent # This is almost the ugliest most stupidest most dumbest solution, but it's all i got :/
 
         json_data_obj = JsonData("data.json")
         json_data_obj.remove_task(list_item.text.replace("[b]", "").replace("[/b]", ""), ScreenObject.name.replace("[b]", "").replace("[/b]", ""))
@@ -60,27 +60,21 @@ class DialogContent(MDBoxLayout):
 class ToDoListPage(Screen):
     def __init__(self, **kw):
         super().__init__(**kw)
+        # this does not work in practice, leads to crashes on creation of 
         Clock.schedule_once(partial(self.load_tasks))
-    
+    # load tasks from JSON file and place in list object
     def load_tasks(self, *largs):
         jsonDataObject = JsonData("data.json")
         parent_list_index = jsonDataObject.find_list(self.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[size=32]","").replace("[/size]","").replace("[b]","").replace("[/b]", ""))
-        print(f"found parent list index: {parent_list_index}")
-
-        for i in jsonDataObject.data["lists"][parent_list_index]["tasks"]:
-            loaded_task = ListItemWithCheckbox(text= "[b]" + i["task_name"] + "[/b]", secondary_text=i["task_date"])
-            print(loaded_task.ids)
-            loaded_task.ids.check.active = self.set_tick_box(i["completed"])
-            if loaded_task.ids.check.active:
-                loaded_task.text = "[s]" + loaded_task.text + "[/s]"
-            self.ids["Container"].add_widget(loaded_task)
-
-    def set_tick_box(self, complete):
-        if complete:
-            return True
-        return False
-
-    
+        print(parent_list_index)
+        if parent_list_index != None:
+            for i in jsonDataObject.data["lists"][parent_list_index]["tasks"]:
+                loaded_task = ListItemWithCheckbox(text= "[b]" + i["task_name"] + "[/b]", secondary_text=i["task_date"])
+                loaded_task.ids.check.active = i["completed"]
+                if loaded_task.ids.check.active:
+                    loaded_task.text = "[s]" + loaded_task.text + "[/s]"
+                self.ids["Container"].add_widget(loaded_task)
+  
     task_list_dialog = None
     # opens dialog box 
     def show_task_dialog(self):
