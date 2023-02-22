@@ -3,7 +3,7 @@ from kivymd.app import MDApp
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.list import OneLineAvatarIconListItem
-from ToDoListPage import ToDoListPage
+from ToDoListPage import ToDoListPage, LoadedToDoListPage
 from JSON_Interface import JsonData
 from kivy.clock import Clock
 from functools import partial
@@ -24,7 +24,7 @@ class ToDoListView(Screen):
             self.bind_on_release_to_loaded_item(sm, i) 
 
     def bind_on_release_to_loaded_item(self, sm, loaded_item):
-        self.manager.add_widget(ToDoListPage(name = loaded_item.text))
+        self.manager.add_widget(LoadedToDoListPage(name = loaded_item.text))
         self.manager.get_screen(loaded_item.text).ids.ToDoListName.text = loaded_item.text
         loaded_item.bind(on_release= lambda x: self.change_screen(loaded_item.text))
     

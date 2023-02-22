@@ -58,23 +58,7 @@ class DialogContent(MDBoxLayout):
 
 # Main screen for creating and managing list items 
 class ToDoListPage(Screen):
-    def __init__(self, **kw):
-        super().__init__(**kw)
-        # this does not work in practice, leads to crashes on creation of 
-        Clock.schedule_once(partial(self.load_tasks))
-    # load tasks from JSON file and place in list object
-    def load_tasks(self, *largs):
-        jsonDataObject = JsonData("data.json")
-        parent_list_index = jsonDataObject.find_list(self.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[size=32]","").replace("[/size]","").replace("[b]","").replace("[/b]", ""))
-        print(parent_list_index)
-        if parent_list_index != None:
-            for i in jsonDataObject.data["lists"][parent_list_index]["tasks"]:
-                loaded_task = ListItemWithCheckbox(text= "[b]" + i["task_name"] + "[/b]", secondary_text=i["task_date"])
-                loaded_task.ids.check.active = i["completed"]
-                if loaded_task.ids.check.active:
-                    loaded_task.text = "[s]" + loaded_task.text + "[/s]"
-                self.ids["Container"].add_widget(loaded_task)
-  
+    
     task_list_dialog = None
     # opens dialog box 
     def show_task_dialog(self):
@@ -103,3 +87,22 @@ class ToDoListPage(Screen):
         
         task.text = ""
         task_date.text = ""
+
+class LoadedToDoListPage(ToDoListPage):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        Clock.schedule_once(partial(self.load_tasks))
+    # load tasks from JSON file and place in list object
+    def load_tasks(self, *largs):
+        jsonDataObject = JsonData("data.json")
+        parent_list_index = jsonDataObject.find_list(self.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[size=32]","").replace("[/size]","").replace("[b]","").replace("[/b]", ""))
+        print(parent_list_index)
+        # Due to the placement of this method in the __init__ method, crashes occur once a new list is created
+        # possibly create child class containing this method to be used in cases of loaded lists?
+        if parent_list_index != None:
+            for i in jsonDataObject.data["lists"][parent_list_index]["tasks"]:
+                loaded_task = ListItemWithCheckbox(text= "[b]" + i["task_name"] + "[/b]", secondary_text=i["task_date"])
+                loaded_task.ids.check.active = i["completed"]
+                if loaded_task.ids.check.active:
+                    loaded_task.text = "[s]" + loaded_task.text + "[/s]"
+                self.ids["Container"].add_widget(loaded_task)
