@@ -101,7 +101,7 @@
 
 <DialogContent>:
     orientation: "vertical"
-    padding: "20dp"
+    sapcing: "20dp"
     size_hint: 1, None
     height: "200dp"
 
@@ -112,13 +112,14 @@
         max_text_length: 50
         on_text_validate: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
 	
-	GridLayout:
-        rows: 1
+	BoxLayout:
+		orientation: "vertical"
     	MDRectangleFlatIconButton:
 			icon: 'calendar'
     	    text: 'Add a Deadline'
     	    on_release: root.show_date_picker()
     	MDLabel:
+			spacing: "10dp"
     	    id: date_text
     BoxLayout:
         orientation: 'horizontal'
