@@ -11,9 +11,9 @@ from functools import partial
 class ToDoListView(Screen):
     def __init__(self, sm,**kw):
         super().__init__(**kw)
-        Clock.schedule_once(partial(self.load_lsits, sm)) 
+        Clock.schedule_once(partial(self.load_lists)) 
     ''' Methods for loading tasks from JSON file to screen'''
-    def load_lsits(self, sm, *largs):
+    def load_lists(self, *largs):
         json_data_object = JsonData("data.json")
         self.loaded_items = []
 
@@ -21,9 +21,9 @@ class ToDoListView(Screen):
             self.add_loaded_item_to_list(i)    
 
         for i in self.loaded_items:
-            self.bind_on_release_to_loaded_item(sm, i) 
+            self.bind_on_release_to_loaded_item(i) 
 
-    def bind_on_release_to_loaded_item(self, sm, loaded_item):
+    def bind_on_release_to_loaded_item(self, loaded_item):
         self.manager.add_widget(LoadedToDoListPage(name = loaded_item.text))
         self.manager.get_screen(loaded_item.text).ids.ToDoListName.text = loaded_item.text
         loaded_item.bind(on_release= lambda x: self.change_screen(loaded_item.text))
@@ -64,7 +64,7 @@ class ToDoListView(Screen):
     # Allows for the changing of screens when a list item is pressed
     def change_screen(self, list_name):
         self.parent.get_screen(list_name).ids.ToDoListName.text = "[u][b]" + list_name + "[/b][/u]"
-        self.parent.get_screen(list_name).ids.ToDoListName.font_size = "32"
+        self.parent.get_screen(list_name).ids.ToDoListName.font_size = "32dp"
         self.parent.current = list_name
         print(f"Changing screen to: {self.parent.current}")
 

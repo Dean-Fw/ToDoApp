@@ -7,7 +7,7 @@
 			padding: [10,0]
 			markup: True
 			text: "[u][b]Your ToDo lists[/b][/u]"
-			font_size: "32"
+			font_size: "32dp"
 			pos_hint: {"y": .45}
 		
 		ScrollView:
@@ -21,11 +21,11 @@
 			icon: "plus-thick"
 			on_release: root.show_task_dialog()
 			elevation_noraml: 10
-			pos_hint: {"x": .9, "y":.05}
+			pos_hint: {"x": .85, "y":.05}
 
 <CreateListDialog>:
 	orientation: "vertical"
-	padding: "20dp"
+	padding: "5dp"
 	size_hint: 1, None
 	height: "130dp"
 
@@ -34,7 +34,6 @@
 		hint_text: "Name ToDo list..."
 		pos_hint: {"center_y": .4}
         max_text_length: 50
-		on_text_validate: (app.root.get_screen("ListView").add_task(list_text), app.root.get_screen("ListView").close_dialog())
 
 	BoxLayout:
         orientation: 'horizontal'
@@ -97,7 +96,7 @@
 			icon: "plus-thick"
 			on_release: root.show_task_dialog()
 			elevation_noraml: 10
-			pos_hint: {"x": .9, "y":.05}
+			pos_hint: {"x": .85, "y":.05}
 
 <DialogContent>:
     orientation: "vertical"
@@ -110,7 +109,6 @@
         hint_text: "Add Task..."
         pos_hint: {"center_y": .4}
         max_text_length: 50
-        on_text_validate: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
 	
 	BoxLayout:
 		orientation: "vertical"
