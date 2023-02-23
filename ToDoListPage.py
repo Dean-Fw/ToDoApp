@@ -93,10 +93,12 @@ class LoadedToDoListPage(ToDoListPage):
         jsonDataObject = JsonData("data.json")
         parent_list_index = jsonDataObject.find_list(self.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[b]","").replace("[/b]", ""))
         print(f"Parent list index: {parent_list_index}")
-
-        for i in jsonDataObject.data["lists"][parent_list_index]["tasks"]:
+        self.create_loaded_object(jsonDataObject.data["lists"][parent_list_index]["tasks"])
+        
+    def create_loaded_object(self, task_list):
+        for i in task_list:
             loaded_task = ListItemWithCheckbox(text= "[b]" + i["task_name"] + "[/b]", secondary_text=i["task_date"])
             loaded_task.ids.check.active = i["completed"]
             if loaded_task.ids.check.active:
                 loaded_task.text = "[s]" + loaded_task.text + "[/s]"
-                self.ids["Container"].add_widget(loaded_task)
+            self.ids["Container"].add_widget(loaded_task)

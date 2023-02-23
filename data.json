@@ -34,6 +34,16 @@
                     "task_date": "Saturday 15 April 2023"
                 }
             ]
+        },
+        {
+            "list_name": "List 3",
+            "tasks": [
+                {
+                    "task_name": "Task",
+                    "completed": false,
+                    "task_date": ""
+                }
+            ]
         }
     ]
 }

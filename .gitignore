@@ -1,6 +1,1 @@
-venv/
-__pychache__/
-.buildozer/
-bin/
-buildozer.spec
-jsonExperiment.py
+buildScript.sh
