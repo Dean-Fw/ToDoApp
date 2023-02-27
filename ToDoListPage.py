@@ -51,24 +51,59 @@ class DialogContent(MDBoxLayout):
     def on_save(self, instance, value, date_range):
         date = value.strftime("%A %d %B %Y") 
         self.ids.date_text.text = str(date)
+class CreateSaveAndExit():
+    pass
+class EditSaveAndExit():
+    pass
+# Child of DialogContent created to allow for editing of tasks
+class EditTaskDialogContent(DialogContent):
+    def __init__(self,task_name, task_date, list_item = None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.parent_item = list_item
+        Clock.schedule_once(partial(self.get_task_details,task_name, task_date))
+        #self.ids.save_button.bind(on_release = lambda x : self.edit_task(task_name,task_date, self.parent_item))
+   
+    def get_task_details(self,task_name, task_date, *largs):
+        self.ids.task_text.text =  task_name.replace("[b]", "").replace("[/b]", "")
+        self.ids.date_text.text = task_date
+        self.remove_widget(self.ids.save_or_exit)
+        self.ids.save_or_exit.add_widget(EditSaveAndExit())
+         
+    def edit_task(self,task_name,task_date, parent_item):
+        print(parent_item.text)
+        print(parent_item.secondary_text)
+        parent_item.text = "[b]" + task_name + "[/b]"
+        parent_item.secondary_text = task_date
 
 # Main screen for creating and managing list items 
 class ToDoListPage(Screen):
-
-    task_list_dialog = None
-    # opens dialog box 
+    dialog = None
+    #open edit task dialog 
+    def open_edit_dialog(self, text, date, object):
+        if not self.dialog: # if a dialog does not exits 
+            self.dialog = MDDialog ( # define one 
+                title="Edit Task",
+                type="custom",
+                content_cls=EditTaskDialogContent(text, date, object)
+            )
+        self.dialog.open() # open the dialog 
+    # closes dialog box
+    def close_dialog(self):
+        self.dialog.dismiss()
+        self.dialog = None
+    # opens task creation dialog box 
     def show_task_dialog(self):
-        if not self.task_list_dialog: # if a dialog does not exits 
-            self.task_list_dialog = MDDialog ( # define one 
+        if not self.dialog: # if a dialog does not exits 
+            self.dialog = MDDialog ( # define one 
                 title="Create Task",
                 type="custom",
                 content_cls=DialogContent()
             )
-        self.task_list_dialog.open() # open the dialog 
-    # closes dialog box
-    def close_dialog(self):
-        self.task_list_dialog.dismiss()
-    
+        self.dialog.open() # open the dialog 
+
+    def edit_task():
+        pass
+
     # Takes information from dialog box and creates a list item from it
     def add_task(self, task, task_date):
         json_data_obj = JsonData("data.json")

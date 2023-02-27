@@ -58,6 +58,7 @@
 <ListItemWithCheckbox>:
 	id: list_item
 	markup: True
+	on_release: app.root.current_screen.open_edit_dialog(self.text, self.secondary_text, self)
 	LeftCheckbox:
 		id: check
 		on_release:
@@ -98,6 +99,29 @@
 			elevation_noraml: 10
 			pos_hint: {"x": .85, "y":.05}
 
+<EditSaveAndExit>:
+	BoxLayout:
+		id: save_or_exit
+        orientation: 'horizontal'
+		MDRaisedButton:
+			id: save_button
+        	text: "SAVE"
+        	on_release: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
+        MDFlatButton:
+            text: 'CANCEL'
+            on_release: app.root.current_screen.close_dialog()
+
+<CreateSaveAndExit>:
+	BoxLayout:
+		id: save_or_exit
+        orientation: 'horizontal'
+		MDRaisedButton:
+			id: save_button
+        	text: "SAVE"
+			on_release: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
+        MDFlatButton:
+            text: 'CANCEL'
+            on_release: app.root.current_screen.close_dialog()
 <DialogContent>:
     orientation: "vertical"
     sapcing: "20dp"
@@ -119,14 +143,8 @@
     	MDLabel:
 			spacing: "10dp"
     	    id: date_text
-    BoxLayout:
-        orientation: 'horizontal'
+		
 
-        MDRaisedButton:
-            text: "SAVE"
-            on_release: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
-        MDFlatButton:
-            text: 'CANCEL'
-            on_release: app.root.current_screen.close_dialog()
+        
 
 
