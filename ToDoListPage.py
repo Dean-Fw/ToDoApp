@@ -37,8 +37,11 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
     pass
 
+# Rule for save button used in edit dialog
 class SaveEditedTaskButton(MDRaisedButton):
     pass
+
+# Rule for save button used in task creation dialog 
 class SaveNewTaskButton(MDRaisedButton):
     pass
 
@@ -81,15 +84,10 @@ class EditTaskDialogContent(DialogContent):
     def edit_JSON(self, new_task_data):
         app = MDApp.get_running_app()
         json_data_obj = JsonData("data.json")
-        
         parent_list_name = app.root.current_screen.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[b]", "").replace("[/b]","")
         task_name = self.parent_item.text.replace("[b]", "").replace("[/b]", "")
-
         json_data_obj.edit_task(new_task_data, task_name, parent_list_name)
-
-
         
-
 # child of dialog content to allow for creation of tasks 
 class CreateTaskDialogContent(DialogContent):
     def __init__(self,**kwargs):
@@ -102,7 +100,7 @@ class CreateTaskDialogContent(DialogContent):
         task_deadline = self.ids.date_text
         
         app = MDApp.get_running_app()
-        
+
         json_data_obj = JsonData("data.json")
         print(f"Creating task: {task_name.text, task_deadline.text}")
         
@@ -117,6 +115,7 @@ class CreateTaskDialogContent(DialogContent):
 
 # Main screen for creating and managing list items 
 class ToDoListPage(Screen):
+    
     dialog = None
     #open edit task dialog 
     def open_edit_dialog(self, object):
@@ -140,11 +139,6 @@ class ToDoListPage(Screen):
                 content_cls=CreateTaskDialogContent()
             )
         self.dialog.open() # open the dialog 
-
-    def edit_task():
-        pass
-
-    
 
 # child class of ToDoListPage for use when loading in pages from JSON file
 class LoadedToDoListPage(ToDoListPage):
