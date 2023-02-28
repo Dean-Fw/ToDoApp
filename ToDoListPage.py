@@ -4,6 +4,7 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.pickers import MDDatePicker
 from kivy.uix.screenmanager import Screen
+from kivymd.uix.button import MDFlatButton
 from JSON_Interface import JsonData
 from functools import partial
 from kivy.clock import Clock
@@ -35,13 +36,21 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
     pass
 
+class SaveEditedTaskButton(MDFlatButton):
+    pass
+class SaveNewTaskButton(MDFlatButton):
+    pass
+
 # Dialog Box for creating list items 
 class DialogContent(MDBoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.ids.date_text.text = str("") # set date text to todays date when user 
+        self.ids.date_text.text = str("")
+         # set date text to todays date when user 
         # %A = Week Day, %d = Day, %B = Month name, %Y = Year
     # opens date picker instnace 
+
+
     def show_date_picker(self):
         date_dialog = MDDatePicker() #instantiate date picker widget
         date_dialog.bind(on_save=self.on_save) #bind the date picker to a function that saves content
@@ -51,10 +60,7 @@ class DialogContent(MDBoxLayout):
     def on_save(self, instance, value, date_range):
         date = value.strftime("%A %d %B %Y") 
         self.ids.date_text.text = str(date)
-class CreateSaveAndExit():
-    pass
-class EditSaveAndExit():
-    pass
+
 # Child of DialogContent created to allow for editing of tasks
 class EditTaskDialogContent(DialogContent):
     def __init__(self,task_name, task_date, list_item = None, *args, **kwargs):
@@ -66,8 +72,6 @@ class EditTaskDialogContent(DialogContent):
     def get_task_details(self,task_name, task_date, *largs):
         self.ids.task_text.text =  task_name.replace("[b]", "").replace("[/b]", "")
         self.ids.date_text.text = task_date
-        self.remove_widget(self.ids.save_or_exit)
-        self.ids.save_or_exit.add_widget(EditSaveAndExit())
          
     def edit_task(self,task_name,task_date, parent_item):
         print(parent_item.text)
