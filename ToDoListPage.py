@@ -4,7 +4,8 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.pickers import MDDatePicker
 from kivy.uix.screenmanager import Screen
-from kivymd.uix.button import MDFlatButton
+from kivymd.uix.button import MDRaisedButton
+from kivymd.app import MDApp
 from JSON_Interface import JsonData
 from functools import partial
 from kivy.clock import Clock
@@ -36,21 +37,18 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
     pass
 
-class SaveEditedTaskButton(MDFlatButton):
+class SaveEditedTaskButton(MDRaisedButton):
     pass
-class SaveNewTaskButton(MDFlatButton):
+class SaveNewTaskButton(MDRaisedButton):
     pass
 
-# Dialog Box for creating list items 
+# Abstract calss for Dialog Box for creating task items 
 class DialogContent(MDBoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.ids.date_text.text = str("")
-         # set date text to todays date when user 
-        # %A = Week Day, %d = Day, %B = Month name, %Y = Year
-    # opens date picker instnace 
 
-
+    #opens date picker dialog 
     def show_date_picker(self):
         date_dialog = MDDatePicker() #instantiate date picker widget
         date_dialog.bind(on_save=self.on_save) #bind the date picker to a function that saves content
@@ -63,32 +61,70 @@ class DialogContent(MDBoxLayout):
 
 # Child of DialogContent created to allow for editing of tasks
 class EditTaskDialogContent(DialogContent):
-    def __init__(self,task_name, task_date, list_item = None, *args, **kwargs):
+    def __init__(self,object, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.parent_item = list_item
-        Clock.schedule_once(partial(self.get_task_details,task_name, task_date))
+        self.parent_item = object
+        Clock.schedule_once(partial(self.get_task_details,self.parent_item.text, self.parent_item.secondary_text))
         #self.ids.save_button.bind(on_release = lambda x : self.edit_task(task_name,task_date, self.parent_item))
    
     def get_task_details(self,task_name, task_date, *largs):
         self.ids.task_text.text =  task_name.replace("[b]", "").replace("[/b]", "")
         self.ids.date_text.text = task_date
+        self.ids.save_or_exit.add_widget(SaveEditedTaskButton())
          
-    def edit_task(self,task_name,task_date, parent_item):
-        print(parent_item.text)
-        print(parent_item.secondary_text)
-        parent_item.text = "[b]" + task_name + "[/b]"
-        parent_item.secondary_text = task_date
+    def edit_task(self):
+        print(self.ids.task_text.text)
+        self.edit_JSON([self.ids.task_text.text, self.ids.date_text.text])
+        self.parent_item.text = "[b]" + self.ids.task_text.text + "[/b]"
+        self.parent_item.secondary_text = self.ids.date_text.text
+
+    def edit_JSON(self, new_task_data):
+        app = MDApp.get_running_app()
+        json_data_obj = JsonData("data.json")
+        
+        parent_list_name = app.root.current_screen.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[b]", "").replace("[/b]","")
+        task_name = self.parent_item.text.replace("[b]", "").replace("[/b]", "")
+
+        json_data_obj.edit_task(new_task_data, task_name, parent_list_name)
+
+
+        
+
+# child of dialog content to allow for creation of tasks 
+class CreateTaskDialogContent(DialogContent):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.ids.date_text.text = str("")
+        self.ids.save_or_exit.add_widget(SaveNewTaskButton())
+    
+    def add_task(self):
+        task_name = self.ids.task_text
+        task_deadline = self.ids.date_text
+        
+        app = MDApp.get_running_app()
+        
+        json_data_obj = JsonData("data.json")
+        print(f"Creating task: {task_name.text, task_deadline.text}")
+        
+        app.root.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
+        parent_list = app.root.current_screen.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[b]", "").replace("[/b]","")
+        
+        task_json = {"task_name":task_name.text, "completed":False, "task_date": task_deadline.text}
+        json_data_obj.append_new_task(task_json, parent_list)
+        
+        task_name.text = ""
+        task_deadline.text = ""
 
 # Main screen for creating and managing list items 
 class ToDoListPage(Screen):
     dialog = None
     #open edit task dialog 
-    def open_edit_dialog(self, text, date, object):
+    def open_edit_dialog(self, object):
         if not self.dialog: # if a dialog does not exits 
             self.dialog = MDDialog ( # define one 
                 title="Edit Task",
                 type="custom",
-                content_cls=EditTaskDialogContent(text, date, object)
+                content_cls=EditTaskDialogContent(object)
             )
         self.dialog.open() # open the dialog 
     # closes dialog box
@@ -101,26 +137,14 @@ class ToDoListPage(Screen):
             self.dialog = MDDialog ( # define one 
                 title="Create Task",
                 type="custom",
-                content_cls=DialogContent()
+                content_cls=CreateTaskDialogContent()
             )
         self.dialog.open() # open the dialog 
 
     def edit_task():
         pass
 
-    # Takes information from dialog box and creates a list item from it
-    def add_task(self, task, task_date):
-        json_data_obj = JsonData("data.json")
-        print(f"Creating task: {task.text, task_date.text}")
-        
-        self.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task.text+"[/b]", secondary_text=task_date.text))
-        parent_list = self.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[b]", "").replace("[/b]","")
-        
-        task_json = {"task_name":task.text, "completed":False, "task_date": task_date.text}
-        json_data_obj.append_new_task(task_json, parent_list)
-        
-        task.text = ""
-        task_date.text = ""
+    
 
 # child class of ToDoListPage for use when loading in pages from JSON file
 class LoadedToDoListPage(ToDoListPage):
