@@ -1,3 +1,19 @@
 {
-    "lists": []
+    "lists": [
+        {
+            "list_name": "List 1",
+            "tasks": [
+                {
+                    "task_name": "Task 1 (edited)",
+                    "completed": false,
+                    "task_date": "Wednesday 15 March 2023"
+                },
+                {
+                    "task_name": "Task 2 (edited)",
+                    "completed": false,
+                    "task_date": ""
+                }
+            ]
+        }
+    ]
 }

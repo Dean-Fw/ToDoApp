@@ -1,12 +1,12 @@
 from kivy.uix.screenmanager import Screen
-from kivymd.app import MDApp
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.list import OneLineAvatarIconListItem
-from ToDoListPage import ToDoListPage, LoadedToDoListPage
+from ToDoListPages import CreatedToDoListPage, LoadedToDoListPage
 from JSON_Interface import JsonData
 from kivy.clock import Clock
 from functools import partial
+from DialogBoxes import CreateListDialog
+from kivymd.uix.list import OneLineAvatarIconListItem
+from kivymd.app import MDApp
 
 class ToDoListView(Screen):
     def __init__(self, sm,**kw):
@@ -63,19 +63,17 @@ class ToDoListView(Screen):
     
     # Allows for the changing of screens when a list item is pressed
     def change_screen(self, list_name):
-        self.parent.get_screen(list_name).ids.ToDoListName.text = "[u][b]" + list_name + "[/b][/u]"
-        self.parent.get_screen(list_name).ids.ToDoListName.font_size = "32dp"
-        self.parent.current = list_name
-        print(f"Changing screen to: {self.parent.current}")
+        self.manager.get_screen(list_name).ids.ToDoListName.text = "[u][b]" + list_name + "[/b][/u]"
+        self.manager.get_screen(list_name).ids.ToDoListName.font_size = "32dp"
+        self.manager.current = list_name
+        print(f"Changing screen to: {self.manager.current}")
 
     def create_screen(self, object):
-        self.parent.add_widget(ToDoListPage(name=str(object.text)))
+        self.manager.add_widget(CreatedToDoListPage(name=str(object.text)))
         object.bind(on_release= lambda x : self.change_screen(object.text))
         self.ids["Container"].add_widget(object)
 
-class CreateListDialog(MDBoxLayout):
-    pass
-
+# This class can not be placed inside of the LitsItems.py file as it causes circular imports
 class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
     # Allows for the deletion of items upon clicking the "bin" icon
     def delete_item(self, list_item):
@@ -86,4 +84,5 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
         # Remove List from JSON file 
         json_data_obj = JsonData("data.json")
         json_data_obj.remove_list(list_item.text.replace("[b]", "").replace("[/b]",""))
-        app.root.remove_widget(ToDoListPage(name=list_item.text)) # delete the screen
+        app.root.remove_widget(CreatedToDoListPage(name=list_item.text)) # delete the screen
+
