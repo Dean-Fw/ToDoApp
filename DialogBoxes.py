@@ -53,16 +53,17 @@ class EditTaskDialogContent(DialogContent):
     def edit_JSON(self, new_task_data):
         app = MDApp.get_running_app()
         json_data_obj = JsonData("data.json")
-        parent_list_name = app.root.current_screen.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[b]", "").replace("[/b]","")
+        parent_list_name = app.root.ids.screen_manager.current_screen.name.replace("[b]","").replace("[/b]","")
         task_name = self.parent_item.text.replace("[b]", "").replace("[/b]", "")
         json_data_obj.edit_task(new_task_data, task_name, parent_list_name)
         
 # child of dialog content to allow for creation of tasks 
 class CreateTaskDialogContent(DialogContent):
-    def __init__(self,**kwargs):
-        super().__init__(**kwargs)
+    def __init__(self,screen_manager,**kwargs):
+        super().__init__(**kwargs) 
         self.ids.date_text.text = str("")
         self.ids.save_or_exit.add_widget(SaveNewTaskButton())
+        self.screen_manager = screen_manager
     
     def add_task(self):
         task_name = self.ids.task_text
@@ -73,8 +74,8 @@ class CreateTaskDialogContent(DialogContent):
         json_data_obj = JsonData("data.json")
         print(f"Creating task: {task_name.text, task_deadline.text}")
         
-        app.root.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
-        parent_list = app.root.current_screen.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[b]", "").replace("[/b]","")
+        app.root.ids.screen_manager.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
+        parent_list = app.root.ids.screen_manager.current_screen.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[b]", "").replace("[/b]","")
         
         task_json = {"task_name":task_name.text, "completed":False, "task_date": task_deadline.text}
         json_data_obj.append_new_task(task_json, parent_list)
@@ -83,4 +84,6 @@ class CreateTaskDialogContent(DialogContent):
         task_deadline.text = ""
 
 class CreateListDialog(MDBoxLayout):
-    pass
+    def __init__(self, screen_manager, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.screen_manager = screen_manager

@@ -1,15 +1,60 @@
+<ContentNavigationDrawer>:
+    MDList:
+
+        OneLineListItem:
+            text: "Screen 1"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "scr 1"
+				app.root.ids.topBar.title = "Screen 1"
+
+        OneLineIconListItem:
+            text: "ToDo Lists"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "ToDoListFeature"
+				app.root.ids.topBar.title = "Your ToDo Lists"
+			
+			IconLeftWidget:
+        		icon: "format-list-bulleted"
+
+MDScreen:
+
+    MDTopAppBar:
+		id: topBar
+        pos_hint: {"top": 1}
+        elevation: 4
+        title: "Screen 1"
+        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+
+    MDNavigationLayout:
+
+        MDScreenManager:
+            id: screen_manager
+
+            MDScreen:
+                name: "scr 1"
+
+                MDLabel:
+                    text: "Screen 1"
+                    halign: "center"
+
+            ToDoListView:
+				id: ToDoListView
+				screen_manager: screen_manager
+                name: "ToDoListFeature"
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            radius: (0, 16, 16, 0)
+
+            ContentNavigationDrawer:
+                screen_manager: screen_manager
+                nav_drawer: nav_drawer
+
 # ToDo List view Styling
 <ToDoListView>:
-	MDFloatLayout:
-		MDLabel:
-			id: title
-			halign: "left"
-			padding: [10,0]
-			markup: True
-			text: "[u][b]Your ToDo lists[/b][/u]"
-			font_size: "32dp"
-			pos_hint: {"y": .45}
-		
+	MDFloatLayout:	
 		ScrollView:
 			pos_hint: {"center_y": .5, "center_x": .5}
 			size_hint: .9, .8
@@ -19,7 +64,7 @@
 			
 		MDFloatingActionButton:
 			icon: "plus-thick"
-			on_release: root.show_task_dialog()
+			on_release: root.show_task_dialog(root.screen_manager)
 			elevation_noraml: 10
 			pos_hint: {"x": .85, "y":.05}
 
@@ -40,10 +85,10 @@
 
         MDRaisedButton:
             text: "SAVE"
-            on_release: (app.root.get_screen("ListView").add_task(list_text), app.root.get_screen("ListView").close_dialog())
+            on_release: (root.screen_manager.get_screen("ToDoListFeature").add_task(list_text), root.screen_manager.get_screen("ToDoListFeature").close_dialog())
         MDFlatButton:
             text: 'CANCEL'
-            on_release: app.root.get_screen("ListView").close_dialog()
+            on_release: root.screen_manager.get_screen("ToDoListFeature").close_dialog()
 
 <ListItemWithoutCheckbox>:
 	id: list_item
@@ -58,7 +103,7 @@
 <ListItemWithCheckbox>:
 	id: list_item
 	markup: True
-	on_release: app.root.current_screen.open_edit_dialog(self)
+	on_release: app.root.ids.screen_manager.current_screen.open_edit_dialog(self)
 	LeftCheckbox:
 		id: check
 		on_release:
@@ -73,12 +118,12 @@
 
 <CreatedToDoListPage>:
 	MDFloatLayout:
-		MDLabel:
-			id: ToDoListName
-			halign: "left"
-			padding: [10,0]
-			markup: True
-			pos_hint: {"y": .45}
+		#MDLabel:
+		#	id: ToDoListName
+		#	halign: "left"
+		#	padding: [10,0]
+		#	markup: True
+		#	pos_hint: {"y": .45}
 
 		ScrollView:
 			pos_hint: {"center_y": .5, "center_x": .5}
@@ -91,24 +136,27 @@
 			icon: "keyboard-backspace"
 			text: "Return to ToDo list view"
 			pos_hint: {"x": .05, "y":.05}
-			on_release: app.root.current = "ListView"
+			on_release: 
+				app.root.ids.screen_manager.current = "ToDoListFeature"
+				app.root.ids.topBar.title = "Your ToDo lists"
 
 		MDFloatingActionButton:
 			icon: "plus-thick"
-			on_release: root.show_task_dialog()
+
+			on_release: root.show_task_dialog(app.root.ids.screen_manager)
 			elevation_noraml: 10
 			pos_hint: {"x": .85, "y":.05}
 
 <SaveEditedTaskButton>:
 	id: save_button
     text: "SAVE"
-    on_release: (root.parent.parent.edit_task(), app.root.current_screen.close_dialog())
+    on_release: (root.parent.parent.edit_task(), app.root.ids.screen_manager.current_screen.close_dialog())
 	#on_release: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
         
 <SaveNewTaskButton>:
 	id: save_button
 	text: "SAVE"
-	on_release: (root.parent.parent.add_task(), app.root.current_screen.close_dialog())
+	on_release: (root.parent.parent.add_task(), app.root.ids.screen_manager.current_screen.close_dialog())
 	#on_release: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
 
 <DialogContent>:
