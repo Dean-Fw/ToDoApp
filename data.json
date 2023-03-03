@@ -1,48 +1,16 @@
 {
     "lists": [
         {
-<<<<<<< Updated upstream
             "list_name": "List 1",
-            "tasks": [
-                {
-                    "task_name": "Normal Task",
-                    "completed": true,
-                    "task_date": ""
-                },
-                {
-                    "task_name": "Dated Task",
-                    "completed": false,
-                    "task_date": "Saturday 10 June 2023"
-                }
-            ]
+            "tasks": []
         },
         {
             "list_name": "List 2",
-            "tasks": [
-                {
-                    "task_name": "Normal Task",
-                    "completed": false,
-                    "task_date": ""
-                }
-            ]
+            "tasks": []
         },
         {
             "list_name": "List 3",
-            "tasks": [
-                {
-                    "task_name": "New task (complete)",
-                    "completed": true,
-                    "task_date": ""
-                }
-            ]
-=======
-            "list_name": "List",
             "tasks": []
-        },
-        {
-            "list_name": "List 2",
-            "tasks": []
->>>>>>> Stashed changes
         }
     ]
 }

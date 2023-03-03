@@ -76,3 +76,11 @@ class JsonData:
         task_index = self.find_task(task_to_remove, parent_list_index)
         del self.data["lists"][parent_list_index]["tasks"][task_index]
         self.save_changes("w")
+    # find and edit task in list, then save to JSON
+    def edit_task(self, new_data ,task_to_edit, parent_list):
+        parent_list_index = self.find_list(parent_list)
+        task_index = self.find_task(task_to_edit, parent_list_index)
+
+        self.data["lists"][parent_list_index]["tasks"][task_index]["task_name"] = new_data[0]
+        self.data["lists"][parent_list_index]["tasks"][task_index]["task_date"] = new_data[1]
+        self.save_changes("w")
