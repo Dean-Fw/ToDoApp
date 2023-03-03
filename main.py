@@ -1,7 +1,19 @@
 from kivymd.app import MDApp
 from kivy.lang import Builder
+<<<<<<< Updated upstream
 from kivy.uix.screenmanager import ScreenManager
 from ToDoListView import ToDoListView
+=======
+from kivymd.uix.scrollview import MDScrollView
+from kivy.properties import ObjectProperty
+from ToDoListView import ToDoListView
+from HomeScreen import HomeScreen
+
+
+class ContentNavigationDrawer(MDScrollView):
+    screen_manager = ObjectProperty()
+    nav_drawer = ObjectProperty()
+>>>>>>> Stashed changes
 
 # loads styling and themes, creates and populates a screen manager
 class MainApp(MDApp):

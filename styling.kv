@@ -1,3 +1,79 @@
+<<<<<<< Updated upstream
+=======
+<ContentNavigationDrawer>:
+    MDList:
+
+        OneLineIconListItem:
+            text: "Home"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "HomeScreen"
+				app.root.ids.topBar.title = "Home"
+			IconLeftWidget:
+        		icon: "home"
+
+        OneLineIconListItem:
+            text: "ToDo Lists"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "ToDoListFeature"
+				app.root.ids.topBar.title = "Your ToDo Lists"
+			
+			IconLeftWidget:
+        		icon: "format-list-bulleted"
+
+MDScreen:
+
+    MDTopAppBar:
+		id: topBar
+        pos_hint: {"top": 1}
+        elevation: 4
+        title: "Home"
+        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+
+    MDNavigationLayout:
+
+        MDScreenManager:
+            id: screen_manager
+
+            HomeScreen:
+				id: HomeScreen
+                name: "HomeScreen"
+
+            ToDoListView:
+				id: ToDoListView
+				screen_manager: screen_manager
+                name: "ToDoListFeature"
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            radius: (0, 16, 16, 0)
+
+            ContentNavigationDrawer:
+                screen_manager: screen_manager
+                nav_drawer: nav_drawer
+
+# HomeScreen Styling
+<HomeScreen>:
+	MDBoxLayout:
+		orientation: "vertical"
+		Widget:
+			size_hint: 1, .1
+		MDLabel:
+			text: "Favourited Lists:"
+			font_size: "20dp"	
+			sapcing: "10dp"
+			size_hint: .9, .1
+			pos_hint: {"top": 0.5 + 0.1/2}
+		ScrollView:
+			pos_hint: {"center_y": .5, "center_x": .5}
+			size_hint: .9, .8
+			MDList:
+				id: favourited_lists
+
+
+
+>>>>>>> Stashed changes
 # ToDo List view Styling
 <ToDoListView>:
 	MDFloatLayout:
@@ -47,13 +123,24 @@
 
 <ListItemWithoutCheckbox>:
 	id: list_item
+<<<<<<< Updated upstream
 	on_release: print(self.text)
+=======
+	IconLeftWidget:
+		id: star
+		icon: "star-outline"
+		theme_text_color: "Custom"
+		text_color: 33,150,243,1
+		on_release:
+			root.favourite_list()
+	
+>>>>>>> Stashed changes
 	IconRightWidget:
 		icon: "trash-can-outline"
 		theme_text_color: "Custom"
 		text_color: 1,0,0,1
 		on_release:
-			root.delete_item(list_item)
+			root.delete_item()
 
 # Individual ToDo List Styling
 <ListItemWithCheckbox>:
@@ -128,6 +215,15 @@
             on_release: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
         MDFlatButton:
             text: 'CANCEL'
+<<<<<<< Updated upstream
             on_release: app.root.current_screen.close_dialog()
+=======
+            on_release: app.root.ids.screen_manager.current_screen.close_dialog()
+		
+
+		
+
+        
+>>>>>>> Stashed changes
 
 

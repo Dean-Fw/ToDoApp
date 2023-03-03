@@ -1,6 +1,7 @@
 {
     "lists": [
         {
+<<<<<<< Updated upstream
             "list_name": "List 1",
             "tasks": [
                 {
@@ -34,6 +35,14 @@
                     "task_date": ""
                 }
             ]
+=======
+            "list_name": "List",
+            "tasks": []
+        },
+        {
+            "list_name": "List 2",
+            "tasks": []
+>>>>>>> Stashed changes
         }
     ]
 }
