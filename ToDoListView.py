@@ -99,7 +99,7 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
     def add_favourited_list_to_home(self):
         app = MDApp.get_running_app()
         list_card = ListCard()
-        list_card.ids.list_name.text = self.text
+        list_card.ids.list_name.text = self.text.replace("[b]","").replace("[/b]","")
         app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.add_widget(list_card)    
     
     # Allows for the deletion of items upon clicking the "bin" icon
