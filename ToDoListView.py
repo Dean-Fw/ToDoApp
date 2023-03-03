@@ -8,12 +8,14 @@ from DialogBoxes import CreateListDialog
 from kivymd.uix.list import OneLineAvatarIconListItem
 from kivymd.app import MDApp
 from kivy.properties import ObjectProperty
+from ListItems import ListCard
 
 class ToDoListView(MDScreen):
     def __init__(self,**kw):
         super().__init__(**kw)
         Clock.schedule_once(partial(self.load_lists)) 
         self.screen_manager = ObjectProperty()
+    
     ''' Methods for loading tasks from JSON file to screen'''
     def load_lists(self, *largs):
         json_data_object = JsonData("data.json")
@@ -35,6 +37,7 @@ class ToDoListView(MDScreen):
             self.ids["Container"].add_widget(loaded_object)
             self.loaded_items.append(loaded_object)
 
+    '''Methods for Opening and closing dialog boxes'''
     task_list_dialog = None
     # Opens Dialog box that allows for the creation of classes 
     def show_task_dialog(self,screen_manager): 
@@ -75,19 +78,38 @@ class ToDoListView(MDScreen):
         object.bind(on_release= lambda x : self.change_screen(object.text))
         self.ids["Container"].add_widget(object)
 
+'''List object'''
 # This class can not be placed inside of the LitsItems.py file as it causes circular imports
 class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
     def __init__(self, screen_manager, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.screen_manager = screen_manager
+
+    def favourite_list(self):
+        self.change_star_state()
+    
+    # change the icon that marks whether a list has been favourited or not 
+    def change_star_state(self):
+        if self.ids.star.icon == "star-outline":
+            self.ids.star.icon = "star"
+            self.add_favourited_list_to_home()
+            return
+        self.ids.star.icon = "star-outline"
+
+    def add_favourited_list_to_home(self):
+        app = MDApp.get_running_app()
+        list_card = ListCard()
+        list_card.ids.list_name.text = self.text
+        app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.add_widget(list_card)    
+    
     # Allows for the deletion of items upon clicking the "bin" icon
-    def delete_item(self, list_item):
+    def delete_item(self):
         # Remove screen from app
         app = MDApp.get_running_app() # create instance of running app
-        self.parent.remove_widget(list_item) # remove item from the list 
-        print(f"Removing Screen: {list_item.text}")
+        self.parent.remove_widget(self) # remove item from the list 
+        print(f"Removing Screen: {self.text}")
         # Remove List from JSON file 
         json_data_obj = JsonData("data.json")
-        json_data_obj.remove_list(list_item.text.replace("[b]", "").replace("[/b]",""))
-        app.root.remove_widget(CreatedToDoListPage(name=list_item.text)) # delete the screen
+        json_data_obj.remove_list(self.text.replace("[b]", "").replace("[/b]",""))
+        app.root.ids.screen_manager.remove_widget(CreatedToDoListPage(name=self.text)) # delete the screen
 

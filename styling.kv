@@ -1,12 +1,14 @@
 <ContentNavigationDrawer>:
     MDList:
 
-        OneLineListItem:
-            text: "Screen 1"
+        OneLineIconListItem:
+            text: "Home"
             on_press:
                 root.nav_drawer.set_state("close")
-                root.screen_manager.current = "scr 1"
-				app.root.ids.topBar.title = "Screen 1"
+                root.screen_manager.current = "HomeScreen"
+				app.root.ids.topBar.title = "Home"
+			IconLeftWidget:
+        		icon: "home"
 
         OneLineIconListItem:
             text: "ToDo Lists"
@@ -24,7 +26,7 @@ MDScreen:
 		id: topBar
         pos_hint: {"top": 1}
         elevation: 4
-        title: "Screen 1"
+        title: "Home"
         left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
 
     MDNavigationLayout:
@@ -32,12 +34,9 @@ MDScreen:
         MDScreenManager:
             id: screen_manager
 
-            MDScreen:
-                name: "scr 1"
-
-                MDLabel:
-                    text: "Screen 1"
-                    halign: "center"
+            HomeScreen:
+				id: HomeScreen
+                name: "HomeScreen"
 
             ToDoListView:
 				id: ToDoListView
@@ -51,6 +50,38 @@ MDScreen:
             ContentNavigationDrawer:
                 screen_manager: screen_manager
                 nav_drawer: nav_drawer
+
+# HomeScreen Styling
+<HomeScreen>:
+	MDBoxLayout:
+		orientation: "vertical"
+		Widget:
+			size_hint: 1, .1
+		MDLabel:
+			text: "Favourited Lists:"
+			font_size: "20dp"	
+			sapcing: "10dp"
+			size_hint: .9, .1
+			pos_hint: {"top": 0.5 + 0.1/2}
+		ScrollView:
+			pos_hint: {"center_y": .5, "center_x": .5}
+			size_hint: .9, .8
+			id: scroll_view
+			MDList:
+				id: home_list
+
+
+<ListCard>:
+	padding: "5dp"
+	size_hint_y: None
+	height: "50dp"
+	MDCard:
+		elevation: 2
+		size_hint: 1, 1
+		MDBoxLayout:
+			MDLabel:
+				id: list_name
+			
 
 # ToDo List view Styling
 <ToDoListView>:
@@ -92,12 +123,20 @@ MDScreen:
 
 <ListItemWithoutCheckbox>:
 	id: list_item
+	IconLeftWidget:
+		id: star
+		icon: "star-outline"
+		theme_text_color: "Custom"
+		text_color: 33,150,243,1
+		on_release:
+			root.favourite_list()
+	
 	IconRightWidget:
 		icon: "trash-can-outline"
 		theme_text_color: "Custom"
 		text_color: 1,0,0,1
 		on_release:
-			root.delete_item(list_item)
+			root.delete_item()
 
 # Individual ToDo List Styling
 <ListItemWithCheckbox>:
@@ -185,7 +224,7 @@ MDScreen:
         orientation: 'horizontal'
 		MDFlatButton:
             text: 'CANCEL'
-            on_release: app.root.current_screen.close_dialog()
+            on_release: app.root.ids.screen_manager.current_screen.close_dialog()
 		
 
 		

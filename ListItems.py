@@ -1,6 +1,8 @@
 from JSON_Interface import JsonData
 from kivymd.uix.list import TwoLineAvatarIconListItem, ILeftBodyTouch
 from kivymd.uix.selectioncontrol import MDCheckbox
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivy.properties import StringProperty
 
 class ListItemWithCheckbox(TwoLineAvatarIconListItem):
     # Allows users to complete tasks and see them crossed out 
@@ -28,4 +30,6 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
     pass
 
+class ListCard(MDBoxLayout):
+    pass
 

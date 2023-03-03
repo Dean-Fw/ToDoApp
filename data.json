@@ -1,3 +1,16 @@
 {
-    "lists": []
+    "lists": [
+        {
+            "list_name": "List",
+            "tasks": []
+        },
+        {
+            "list_name": "List 2",
+            "tasks": []
+        },
+        {
+            "list_name": "List 3",
+            "tasks": []
+        }
+    ]
 }

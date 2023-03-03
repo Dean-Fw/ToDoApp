@@ -40,7 +40,7 @@ class EditTaskDialogContent(DialogContent):
         #self.ids.save_button.bind(on_release = lambda x : self.edit_task(task_name,task_date, self.parent_item))
    
     def get_task_details(self,task_name, task_date, *largs):
-        self.ids.task_text.text =  task_name.replace("[b]", "").replace("[/b]", "")
+        self.ids.task_text.text =  task_name.replace("[b]", "").replace("[/b]", "").replace("[s]","").replace("[/s]","")
         self.ids.date_text.text = task_date
         self.ids.save_or_exit.add_widget(SaveEditedTaskButton())
          
@@ -54,7 +54,7 @@ class EditTaskDialogContent(DialogContent):
         app = MDApp.get_running_app()
         json_data_obj = JsonData("data.json")
         parent_list_name = app.root.ids.screen_manager.current_screen.name.replace("[b]","").replace("[/b]","")
-        task_name = self.parent_item.text.replace("[b]", "").replace("[/b]", "")
+        task_name = self.parent_item.text.replace("[b]", "").replace("[/b]", "").replace("[s]","").replace("[/s]","")
         json_data_obj.edit_task(new_task_data, task_name, parent_list_name)
         
 # child of dialog content to allow for creation of tasks 
@@ -75,7 +75,7 @@ class CreateTaskDialogContent(DialogContent):
         print(f"Creating task: {task_name.text, task_deadline.text}")
         
         app.root.ids.screen_manager.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
-        parent_list = app.root.ids.screen_manager.current_screen.ids.ToDoListName.text.replace("[u]", "").replace("[/u]","").replace("[b]", "").replace("[/b]","")
+        parent_list = app.root.ids.screen_manager.current_screen.name.replace("[b]", "").replace("[/b]","")
         
         task_json = {"task_name":task_name.text, "completed":False, "task_date": task_deadline.text}
         json_data_obj.append_new_task(task_json, parent_list)
