@@ -29,6 +29,8 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
 
         print(f"Deleting item: {list_item.text}")
         self.parent.remove_widget(list_item)
+
+        self.screen_manager.current_screen.adjust_home_screen_content(json_data_obj)
         
 # Checkbox for list items 
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
