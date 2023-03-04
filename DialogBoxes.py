@@ -71,7 +71,7 @@ class CreateTaskDialogContent(DialogContent):
         
         json_data_obj = JsonData("data.json")
         print(f"Creating task: {task_name.text, task_deadline.text}")
-        print(self.adjust_home_screen_content())
+
         self.screen_manager.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(self.screen_manager, text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
         parent_list = self.screen_manager.current_screen.name.replace("[b]", "").replace("[/b]","")
         
@@ -80,12 +80,19 @@ class CreateTaskDialogContent(DialogContent):
         
         task_name.text = ""
         task_deadline.text = ""
+        
+        self.adjust_home_screen_content(task_name.text, json_data_obj)
 
-    def adjust_home_screen_content(self):
+    def adjust_home_screen_content(self, task_name, json_data_obj):
         parent_list = self.find_parent_list()
         is_list_favourited = self.check_if_list_is_favourited(parent_list)
-        return is_list_favourited
-    
+        print(is_list_favourited)
+        parent_list_index = json_data_obj.find_list(parent_list.text.replace("[b]","").replace("[/b]",""))
+        if is_list_favourited:
+            for child in self.screen_manager.get_screen("HomeScreen").ids.home_list.children:
+                if child.id == parent_list.text.replace("[b]","").replace("[/b]",""):
+                    child.ids.list_count.text = "[i]Total Tasks : "+ str(len(json_data_obj.data["lists"][parent_list_index]["tasks"])) +"[/i]"
+
     def find_parent_list(self):
         parent_list_name = self.screen_manager.current_screen.name
         print(f"parent list name: {parent_list_name}")
