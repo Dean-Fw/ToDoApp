@@ -18,7 +18,7 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         
         json_data_obj = JsonData("data.json")
         json_data_obj.complete_task(list_item.text.replace("[b]", "").replace("[/b]", "").replace("[s]", "").replace("[/s]",""), ScreenObject.name.replace("[b]", "").replace("[/b]", ""))
-
+        self.screen_manager.current_screen.adjust_home_screen_content(json_data_obj, "Complete")
     # Allows for the deletion of item upon clcking the "bin icon"
     def delete_item(self, list_item):
         ScreenObject = self.screen_manager.current_screen # This is almost the ugliest most stupidest most dumbest solution, but it's all i got :/
@@ -30,7 +30,7 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         print(f"Deleting item: {list_item.text}")
         self.parent.remove_widget(list_item)
 
-        self.screen_manager.current_screen.adjust_home_screen_content(json_data_obj)
+        self.screen_manager.current_screen.adjust_home_screen_content(json_data_obj, "Length")
         
 # Checkbox for list items 
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):

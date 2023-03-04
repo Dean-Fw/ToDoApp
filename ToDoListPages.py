@@ -34,14 +34,27 @@ class CreatedToDoListPage(Screen):
         self.dialog.dismiss()
         self.dialog = None
 
-    def adjust_home_screen_content(self, json_data_obj):
+    def adjust_home_screen_content(self, json_data_obj,type):
         parent_list = self.find_parent_list()
         is_list_favourited = self.check_if_list_is_favourited(parent_list)
         parent_list_index = json_data_obj.find_list(parent_list.text.replace("[b]","").replace("[/b]",""))
         if is_list_favourited:
-            for child in self.screen_manager.get_screen("HomeScreen").ids.home_list.children:
+            self.make_change_to_screen(json_data_obj, parent_list, parent_list_index,type)
+    
+    def make_change_to_screen(self,json_data_obj, parent_list, parent_list_index, type):
+        for child in self.screen_manager.get_screen("HomeScreen").ids.home_list.children:
                 if child.id == parent_list.text.replace("[b]","").replace("[/b]",""):
-                    child.ids.list_count.text = "[i]Total Tasks : "+ str(len(json_data_obj.data["lists"][parent_list_index]["tasks"])) +"[/i]"
+                    if type == "Length":
+                        child.ids.list_count.text = "[i]Total Tasks : "+ str(len(json_data_obj.data["lists"][parent_list_index]["tasks"])) +"[/i]"
+                    elif type == "Complete":
+                        child.ids.total_complete.text = "[i]Total Tasks completed : " + str(self.find_total_completed_tasks(json_data_obj,parent_list_index)) + "[/i]"
+
+    def find_total_completed_tasks(self, json_data_obj, list_index):
+        list_total_complete = 0
+        for task in json_data_obj.data["lists"][list_index]["tasks"]:
+            if task["completed"]:
+                list_total_complete += 1
+        return list_total_complete
 
     def find_parent_list(self):
         parent_list_name = self.screen_manager.current_screen.name
