@@ -103,6 +103,7 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
         list_card.id = self.text.replace("[b]", "").replace("[/b]", "")
         list_card.ids.list_name.text = self.text
         list_card.ids.list_count.text = "[i]Total Tasks : " + str(list_details["list_length"]) + "[/i]"
+        list_card.ids.total_complete.text = "[i]Total Tasks completed : " + str(list_details["total_complete"]) + "[/i]"
         return list_card
 
     def add_favourited_list_to_home(self):
@@ -121,9 +122,13 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
         json_data_obj = JsonData("data.json")
         json_details = {}
         list_index = json_data_obj.find_list(self.text.replace("[b]","").replace("[/b]",""))
+        list_total_complete = 0
+        for task in json_data_obj.data["lists"][list_index]["tasks"]:
+            if task["completed"]:
+                list_total_complete += 1
         
         json_details["list_length"] = len(json_data_obj.data["lists"][list_index]["tasks"])
-
+        json_details["total_complete"] = list_total_complete
         return json_details
     
     def save_favourite_to_Json(self):
