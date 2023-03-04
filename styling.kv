@@ -7,7 +7,7 @@
                 root.nav_drawer.set_state("close")
                 root.screen_manager.current = "HomeScreen"
 				app.root.ids.topBar.title = "Home"
-			IconLeftWidget:
+			IconLeftWidgetWithoutTouch:
         		icon: "home"
 
         OneLineIconListItem:
@@ -17,7 +17,7 @@
                 root.screen_manager.current = "ToDoListFeature"
 				app.root.ids.topBar.title = "Your ToDo Lists"
 			
-			IconLeftWidget:
+			IconLeftWidgetWithoutTouch:
         		icon: "format-list-bulleted"
 
 MDScreen:
@@ -72,14 +72,17 @@ MDScreen:
 
 
 <ListCard>:
+	id: test
 	padding: "5dp"
 	size_hint_y: None
 	height: "50dp"
 	MDCard:
+		padding: "5dp"
 		elevation: 2
 		size_hint: 1, 1
 		MDBoxLayout:
 			MDLabel:
+				markup: True
 				spacing: "5dp"
 				font_size: "20dp"
 				id: list_name

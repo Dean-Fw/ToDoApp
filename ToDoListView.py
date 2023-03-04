@@ -95,13 +95,25 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
             self.add_favourited_list_to_home()
             return
         self.ids.star.icon = "star-outline"
+        self.remove_favourited_list_from_home()
 
     def add_favourited_list_to_home(self):
         app = MDApp.get_running_app()
         list_card = ListCard()
-        list_card.ids.list_name.text = self.text.replace("[b]","").replace("[/b]","")
-        app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.add_widget(list_card)    
-    
+        list_card.id = self.text.replace("[b]", "").replace("[/b]", "")
+        list_card.ids.list_name.text = self.text
+        app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.add_widget(list_card)
+
+    def remove_favourited_list_from_home(self):
+        app = MDApp.get_running_app()
+        card_id = self.text.replace("[b]","").replace("[/b]","")
+        for child in app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children:
+            if child.id == card_id:
+              app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.remove_widget(child) 
+
+    def save_favourite_to_Json(self):
+        json_data_obj = JsonData("data.json")
+
     # Allows for the deletion of items upon clicking the "bin" icon
     def delete_item(self):
         # Remove screen from app
