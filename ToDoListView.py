@@ -28,7 +28,7 @@ class ToDoListView(MDScreen):
 
     def bind_on_release_to_loaded_item(self, loaded_item):
         app = MDApp.get_running_app()
-        self.screen_manager.add_widget(LoadedToDoListPage(name = loaded_item.text))
+        self.screen_manager.add_widget(LoadedToDoListPage(self.screen_manager, name = loaded_item.text))
         loaded_item.bind(on_release= lambda x: self.change_screen(loaded_item.text))
     
     def add_loaded_item_to_list(self, loaded_item):
@@ -73,7 +73,7 @@ class ToDoListView(MDScreen):
         print(f"Changing screen to: {self.screen_manager.current}")
 
     def create_screen(self, object):
-        self.screen_manager.add_widget(CreatedToDoListPage(name=str(object.text)))
+        self.screen_manager.add_widget(CreatedToDoListPage(self.screen_manager, name=str(object.text)))
         object.bind(on_release= lambda x : self.change_screen(object.text))
         self.ids["Container"].add_widget(object)
 

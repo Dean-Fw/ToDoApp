@@ -8,7 +8,7 @@ from ListItems import ListItemWithCheckbox
 from kivymd.app import MDApp
 
 # Main screen for creating and managing list items 
-class CreatedToDoListPage(Screen):
+class CreatedToDoListPage(Screen):      
     # variable to hold dialog object 
     dialog = None
     #open edit task dialog 
@@ -36,9 +36,10 @@ class CreatedToDoListPage(Screen):
 
 # child class of ToDoListPage for use when loading in pages from JSON file
 class LoadedToDoListPage(CreatedToDoListPage):
-    def __init__(self,**kw):
+    def __init__(self,screen_manager,**kw):
         super().__init__(**kw)
         Clock.schedule_once(partial(self.load_tasks))
+        self.screen_manager = screen_manager
     # load tasks from JSON file and place in list object
     def load_tasks(self, *largs):
         app = MDApp.get_running_app()
@@ -50,7 +51,7 @@ class LoadedToDoListPage(CreatedToDoListPage):
     # create a list item object and add it to the screen's list object  
     def create_loaded_object(self, task_list):
         for i in task_list:
-            loaded_task = ListItemWithCheckbox(text= "[b]" + i["task_name"] + "[/b]", secondary_text=i["task_date"])
+            loaded_task = ListItemWithCheckbox(self.screen_manager, text= "[b]" + i["task_name"] + "[/b]", secondary_text=i["task_date"])
             loaded_task.ids.check.active = i["completed"]
             if loaded_task.ids.check.active:
                 loaded_task.text = "[s]" + loaded_task.text + "[/s]"

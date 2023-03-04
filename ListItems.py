@@ -5,9 +5,12 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.properties import StringProperty
 
 class ListItemWithCheckbox(TwoLineAvatarIconListItem):
+    def __init__(self, screen_manager, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.screen_manager = screen_manager
     # Allows users to complete tasks and see them crossed out 
     def mark(self, check, list_item):
-        ScreenObject = self.parent.parent.parent.parent # This is almost the ugliest most stupidest most dumbest solution, but it's all i got :/
+        ScreenObject = self.screen_manager.current_screen # This is almost the ugliest most stupidest most dumbest solution, but it's all i got :/
         if check.active == True: # when a checkbox is ticked
             list_item.text = "[s]"+list_item.text+"[/s]" # add strike through format to completed tasks
         else:
@@ -18,10 +21,11 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
 
     # Allows for the deletion of item upon clcking the "bin icon"
     def delete_item(self, list_item):
-        ScreenObject = self.parent.parent.parent.parent # This is almost the ugliest most stupidest most dumbest solution, but it's all i got :/
+        ScreenObject = self.screen_manager.current_screen # This is almost the ugliest most stupidest most dumbest solution, but it's all i got :/
 
         json_data_obj = JsonData("data.json")
-        json_data_obj.remove_task(list_item.text.replace("[b]", "").replace("[/b]", ""), ScreenObject.name.replace("[b]", "").replace("[/b]", ""))
+        print(ScreenObject.name)
+        json_data_obj.remove_task(list_item.text.replace("[b]", "").replace("[/b]", "").replace("[s]", "").replace("[/s]",""), ScreenObject.name.replace("[b]", "").replace("[/b]", ""))
 
         print(f"Deleting item: {list_item.text}")
         self.parent.remove_widget(list_item)

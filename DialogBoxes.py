@@ -74,7 +74,7 @@ class CreateTaskDialogContent(DialogContent):
         json_data_obj = JsonData("data.json")
         print(f"Creating task: {task_name.text, task_deadline.text}")
         
-        app.root.ids.screen_manager.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
+        app.root.ids.screen_manager.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(self.screen_manager, text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
         parent_list = app.root.ids.screen_manager.current_screen.name.replace("[b]", "").replace("[/b]","")
         
         task_json = {"task_name":task_name.text, "completed":False, "task_date": task_deadline.text}
@@ -82,6 +82,9 @@ class CreateTaskDialogContent(DialogContent):
         
         task_name.text = ""
         task_deadline.text = ""
+
+    def find_parent_list(self):
+        parent_list_name = self.screen_manager.current_screen
 
 class CreateListDialog(MDBoxLayout):
     def __init__(self, screen_manager, *args, **kwargs):
