@@ -97,11 +97,17 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
         self.ids.star.icon = "star-outline"
         self.remove_favourited_list_from_home()
 
-    def add_favourited_list_to_home(self):
-        app = MDApp.get_running_app()
+    def create_card_for_favourited_list(self):
+        list_details = self.find_list_details_in_Json()
         list_card = ListCard()
         list_card.id = self.text.replace("[b]", "").replace("[/b]", "")
         list_card.ids.list_name.text = self.text
+        list_card.ids.list_count.text = "[i]Total Tasks : " + str(list_details["list_length"]) + "[/i]"
+        return list_card
+
+    def add_favourited_list_to_home(self):
+        app = MDApp.get_running_app()
+        list_card = self.create_card_for_favourited_list()
         app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.add_widget(list_card)
 
     def remove_favourited_list_from_home(self):
@@ -111,6 +117,15 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
             if child.id == card_id:
               app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.remove_widget(child) 
 
+    def find_list_details_in_Json(self):
+        json_data_obj = JsonData("data.json")
+        json_details = {}
+        list_index = json_data_obj.find_list(self.text.replace("[b]","").replace("[/b]",""))
+        
+        json_details["list_length"] = len(json_data_obj.data["lists"][list_index]["tasks"])
+
+        return json_details
+    
     def save_favourite_to_Json(self):
         json_data_obj = JsonData("data.json")
 

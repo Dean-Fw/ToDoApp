@@ -75,17 +75,21 @@ MDScreen:
 	id: test
 	padding: "5dp"
 	size_hint_y: None
-	height: "50dp"
+	height: "100dp"
 	MDCard:
-		padding: "5dp"
+		padding: "10dp"
 		elevation: 2
-		size_hint: 1, 1
 		MDBoxLayout:
+			orientation: "vertical"
 			MDLabel:
 				markup: True
-				spacing: "5dp"
 				font_size: "20dp"
 				id: list_name
+			MDLabel:
+				markup: True
+				font_size: "15dp"
+				id: list_count
+				pos_hint:{"x": .01}
 			
 # ToDo List view Styling
 <ToDoListView>:
