@@ -69,13 +69,11 @@ class CreateTaskDialogContent(DialogContent):
         task_name = self.ids.task_text
         task_deadline = self.ids.date_text
         
-        app = MDApp.get_running_app()
-
         json_data_obj = JsonData("data.json")
         print(f"Creating task: {task_name.text, task_deadline.text}")
-        
-        app.root.ids.screen_manager.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(self.screen_manager, text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
-        parent_list = app.root.ids.screen_manager.current_screen.name.replace("[b]", "").replace("[/b]","")
+        print(self.adjust_home_screen_content())
+        self.screen_manager.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(self.screen_manager, text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
+        parent_list = self.screen_manager.current_screen.name.replace("[b]", "").replace("[/b]","")
         
         task_json = {"task_name":task_name.text, "completed":False, "task_date": task_deadline.text}
         json_data_obj.append_new_task(task_json, parent_list)
@@ -83,8 +81,22 @@ class CreateTaskDialogContent(DialogContent):
         task_name.text = ""
         task_deadline.text = ""
 
+    def adjust_home_screen_content(self):
+        parent_list = self.find_parent_list()
+        is_list_favourited = self.check_if_list_is_favourited(parent_list)
+        return is_list_favourited
+    
     def find_parent_list(self):
-        parent_list_name = self.screen_manager.current_screen
+        parent_list_name = self.screen_manager.current_screen.name
+        print(f"parent list name: {parent_list_name}")
+        for list_item in self.screen_manager.get_screen("ToDoListFeature").ids["Container"].children:
+            if list_item.text == parent_list_name:
+                return list_item
+    
+    def check_if_list_is_favourited(self, parent_list):
+        if parent_list.ids.star.icon == "star":
+            return True
+        return False
 
 class CreateListDialog(MDBoxLayout):
     def __init__(self, screen_manager, *args, **kwargs):

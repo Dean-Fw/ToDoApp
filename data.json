@@ -2,7 +2,18 @@
     "lists": [
         {
             "list_name": "List 1",
-            "tasks": []
+            "tasks": [
+                {
+                    "task_name": "Task 1",
+                    "completed": false,
+                    "task_date": ""
+                },
+                {
+                    "task_name": "Task 2",
+                    "completed": false,
+                    "task_date": ""
+                }
+            ]
         },
         {
             "list_name": "List 2",
