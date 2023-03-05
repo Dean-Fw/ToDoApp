@@ -1,7 +1,8 @@
 {
     "lists": [
         {
-            "list_name": "List 1",
+            "list_name": "List",
+            "favourited": true,
             "tasks": [
                 {
                     "task_name": "Task 1",
@@ -17,9 +18,10 @@
         },
         {
             "list_name": "List 2",
+            "favourited": false,
             "tasks": [
                 {
-                    "task_name": "Task 1",
+                    "task_name": "!",
                     "completed": false,
                     "task_date": ""
                 }

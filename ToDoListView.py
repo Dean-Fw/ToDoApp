@@ -27,7 +27,6 @@ class ToDoListView(MDScreen):
             self.bind_on_release_to_loaded_item(i) 
 
     def bind_on_release_to_loaded_item(self, loaded_item):
-        app = MDApp.get_running_app()
         self.screen_manager.add_widget(LoadedToDoListPage(self.screen_manager, name = loaded_item.text))
         loaded_item.bind(on_release= lambda x: self.change_screen(loaded_item.text))
     
@@ -35,6 +34,14 @@ class ToDoListView(MDScreen):
             loaded_object = ListItemWithoutCheckbox(self.screen_manager, text="[b]" + loaded_item["list_name"] + "[/b]")
             self.ids["Container"].add_widget(loaded_object)
             self.loaded_items.append(loaded_object)
+            self.add_loaded_item_to_home_screen(loaded_item, loaded_object)
+    
+    def add_loaded_item_to_home_screen(self, loaded_item, loaded_object):
+        if loaded_item["favourited"]:
+            loaded_object.add_favourited_list_to_home()
+            loaded_object.ids.star.icon = "star"
+        return
+
 
     '''Methods for Opening and closing dialog boxes'''
     task_list_dialog = None
@@ -59,7 +66,7 @@ class ToDoListView(MDScreen):
         list_without_checkbox = ListItemWithoutCheckbox(self.screen_manager,text="[b]" + task.text + "[/b]")
         
         json_data_obj = JsonData("data.json")
-        json_data_obj.append_new_list({"list_name": task.text, "tasks": []})
+        json_data_obj.append_new_list({"list_name": task.text, "favourited": False, "tasks": []})
         
         self.create_screen(list_without_checkbox)
        
@@ -73,7 +80,7 @@ class ToDoListView(MDScreen):
         print(f"Changing screen to: {self.screen_manager.current}")
 
     def create_screen(self, object):
-        self.screen_manager.add_widget(CreatedToDoListPage(self.screen_manager, name=str(object.text)))
+        self.screen_manager.add_widget(CreatedToDoListPage(name=str(object.text)))
         object.bind(on_release= lambda x : self.change_screen(object.text))
         self.ids["Container"].add_widget(object)
 
@@ -93,9 +100,11 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
         if self.ids.star.icon == "star-outline":
             self.ids.star.icon = "star"
             self.add_favourited_list_to_home()
+            self.save_favourite_to_Json()
             return
         self.ids.star.icon = "star-outline"
         self.remove_favourited_list_from_home()
+        self.save_favourite_to_Json()
 
     def create_card_for_favourited_list(self):
         list_details = self.find_list_details_in_Json()
@@ -117,22 +126,26 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
         for child in app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children:
             if child.id == card_id:
               app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.remove_widget(child) 
-
+        
     def find_list_details_in_Json(self):
         json_data_obj = JsonData("data.json")
         json_details = {}
         list_index = json_data_obj.find_list(self.text.replace("[b]","").replace("[/b]",""))
-        list_total_complete = 0
-        for task in json_data_obj.data["lists"][list_index]["tasks"]:
-            if task["completed"]:
-                list_total_complete += 1
-        
+        list_total_complete = self.find_total_completed_tasks(json_data_obj, list_index)
         json_details["list_length"] = len(json_data_obj.data["lists"][list_index]["tasks"])
         json_details["total_complete"] = list_total_complete
         return json_details
     
+    def find_total_completed_tasks(self, json_data_obj, list_index):
+        list_total_complete = 0
+        for task in json_data_obj.data["lists"][list_index]["tasks"]:
+            if task["completed"]:
+                list_total_complete += 1
+        return list_total_complete
+
     def save_favourite_to_Json(self):
         json_data_obj = JsonData("data.json")
+        json_data_obj.edit_favourite(self.text.replace("[b]","").replace("[/b]",""))
 
     # Allows for the deletion of items upon clicking the "bin" icon
     def delete_item(self):

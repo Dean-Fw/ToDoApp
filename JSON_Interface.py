@@ -54,7 +54,15 @@ class JsonData:
         list_index = self.find_list(list_name)
         del self.data["lists"][list_index]
         self.save_changes("w")
-    
+    # find list in JSON, adjust it's "favourited" property
+    def edit_favourite(self, list_name):
+        print("fired")
+        list_index = self.find_list(list_name)
+        if self.data["lists"][list_index]["favourited"]:
+            self.data["lists"][list_index]["favourited"] = False
+        else:
+            self.data["lists"][list_index]["favourited"] = True
+        self.save_changes("w")
     '''Task based methods'''
     # find list in JSON, append to it's task object
     def append_new_task(self, new_task, parent_list):
