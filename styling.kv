@@ -57,28 +57,41 @@ MDScreen:
 		orientation: "vertical"
 		Widget:
 			size_hint: 1, .1
-		MDLabel:
-			text: "Favourited Lists:"
-			font_size: "20dp"	
-			sapcing: "10dp"
-			size_hint: .9, .1
-			pos_hint: {"top": 0.5 + 0.1/2}
 		ScrollView:
 			pos_hint: {"center_y": .5, "center_x": .5}
 			size_hint: .9, .8
 			id: scroll_view
 			MDList:
 				id: home_list
+				FavouriteSpace:
+
+<FavouriteSpace>:
+	
+	padding: "5dp"
+	size_hint_y: None
+    
+	Widget:
+	MDCard:
+		md_bg_color: "#2894f4"
+		MDBoxLayout:
+			padding: "10dp"
+			orientation: "vertical"
+			MDLabel:
+				text: "Favourited Lists:"
+				font_size: "20dp"	
+				sapcing: "10dp"
+				size_hint: .9, .1
+				pos_hint: {"top": 0.5 + 0.1/2}
+			MDList:
+				id: space_for_cards
 
 
 <ListCard>:
-	id: test
 	padding: "5dp"
 	size_hint_y: None
 	height: "100dp"
 	MDCard:
 		padding: "10dp"
-		elevation: 2
 		MDBoxLayout:
 			orientation: "vertical"
 			MDLabel:

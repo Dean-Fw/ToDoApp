@@ -100,10 +100,9 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
         if self.ids.star.icon == "star-outline":
             self.ids.star.icon = "star"
             self.add_favourited_list_to_home()
-            self.save_favourite_to_Json()
-            return
-        self.ids.star.icon = "star-outline"
-        self.remove_favourited_list_from_home()
+        else:
+            self.ids.star.icon = "star-outline"
+            self.remove_favourited_list_from_home()
         self.save_favourite_to_Json()
 
     def create_card_for_favourited_list(self):
@@ -118,15 +117,24 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
     def add_favourited_list_to_home(self):
         app = MDApp.get_running_app()
         list_card = self.create_card_for_favourited_list()
-        app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.add_widget(list_card)
+        print(app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children)
+        for child in app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children:
+            if "FavouriteSpace" in str(child):
+                child.ids.space_for_cards.add_widget(list_card)
+                child.height = child.calc_height()
 
     def remove_favourited_list_from_home(self):
         app = MDApp.get_running_app()
         card_id = self.text.replace("[b]","").replace("[/b]","")
         for child in app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children:
-            if child.id == card_id:
-              app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.remove_widget(child) 
-        
+            if "FavouriteSpace" in str(child):
+                for child2 in child.ids.space_for_cards.children:
+                    
+                    if child2.id == card_id:
+                        print(f"Test: {child2.id}, {card_id}")
+                        child.ids.space_for_cards.remove_widget(child2)
+                        child.height = child.calc_height()
+
     def find_list_details_in_Json(self):
         json_data_obj = JsonData("data.json")
         json_details = {}

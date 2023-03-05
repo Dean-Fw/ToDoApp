@@ -2,7 +2,7 @@
     "lists": [
         {
             "list_name": "List",
-            "favourited": true,
+            "favourited": false,
             "tasks": [
                 {
                     "task_name": "Task 1",
@@ -26,6 +26,16 @@
                     "task_date": ""
                 }
             ]
+        },
+        {
+            "list_name": "kmjnhbhbgvfdcx",
+            "favourited": false,
+            "tasks": []
+        },
+        {
+            "list_name": "Test",
+            "favourited": true,
+            "tasks": []
         }
     ]
 }
