@@ -44,12 +44,18 @@ class CreatedToDoListPage(Screen):
             self.make_change_to_screen(json_data_obj, parent_list, parent_list_index,type)
     
     def make_change_to_screen(self,json_data_obj, parent_list, parent_list_index, type):
+        child = self.find_home_list()
+        for favourite in child.ids.space_for_cards.children:
+            if favourite.id == parent_list.text.replace("[b]","").replace("[/b]",""):
+                if type == "Length":
+                    favourite.ids.list_count.text = "[i]Total Tasks : "+ str(len(json_data_obj.data["lists"][parent_list_index]["tasks"])) +"[/i]"
+                elif type == "Complete":
+                    favourite.ids.total_complete.text = "[i]Total Tasks completed : " + str(self.find_total_completed_tasks(json_data_obj,parent_list_index)) + "[/i]"
+
+    def find_home_list(self):
         for child in self.screen_manager.get_screen("HomeScreen").ids.home_list.children:
-                if child.id == parent_list.text.replace("[b]","").replace("[/b]",""):
-                    if type == "Length":
-                        child.ids.list_count.text = "[i]Total Tasks : "+ str(len(json_data_obj.data["lists"][parent_list_index]["tasks"])) +"[/i]"
-                    elif type == "Complete":
-                        child.ids.total_complete.text = "[i]Total Tasks completed : " + str(self.find_total_completed_tasks(json_data_obj,parent_list_index)) + "[/i]"
+            if "FavouriteSpace" in str(child):
+                return child
 
     def find_total_completed_tasks(self, json_data_obj, list_index):
         list_total_complete = 0

@@ -22,7 +22,17 @@
             "tasks": [
                 {
                     "task_name": "!",
-                    "completed": false,
+                    "completed": true,
+                    "task_date": ""
+                },
+                {
+                    "task_name": "\"",
+                    "completed": true,
+                    "task_date": ""
+                },
+                {
+                    "task_name": "\u00a3",
+                    "completed": true,
                     "task_date": ""
                 }
             ]
