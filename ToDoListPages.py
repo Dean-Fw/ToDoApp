@@ -53,7 +53,8 @@ class CreatedToDoListPage(Screen):
                     favourite.ids.total_complete.text = "[i]Total Tasks completed : " + str(self.find_total_completed_tasks(json_data_obj,parent_list_index)) + "[/i]"
 
     def find_home_list(self):
-        for child in self.screen_manager.get_screen("HomeScreen").ids.home_list.children:
+        app = MDApp.get_running_app()
+        for child in app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children:
             if "FavouriteSpace" in str(child):
                 return child
 
@@ -65,8 +66,9 @@ class CreatedToDoListPage(Screen):
         return list_total_complete
 
     def find_parent_list(self):
-        parent_list_name = self.screen_manager.current_screen.name
-        for list_item in self.screen_manager.get_screen("ToDoListFeature").ids["Container"].children:
+        app = MDApp.get_running_app()
+        parent_list_name = app.root.ids.screen_manager.current_screen.name
+        for list_item in app.root.ids.screen_manager.get_screen("ToDoListFeature").ids["Container"].children:
             if list_item.text == parent_list_name:
                 return list_item
     

@@ -169,5 +169,7 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
         json_data_obj = JsonData("data.json")
 
         json_data_obj.remove_list(self.text.replace("[b]", "").replace("[/b]",""))
-        app.root.ids.screen_manager.remove_widget(CreatedToDoListPage(name=self.text)) # delete the screen
+        app.root.ids.screen_manager.remove_widget(app.root.ids.screen_manager.get_screen(self.text)) # delete the screen
+        self.remove_favourited_list_from_home()
+
 

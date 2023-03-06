@@ -16,11 +16,8 @@ class FavouriteSpace(MDBoxLayout):
         if len(self.ids.space_for_cards.children) == 0:
             self.ids.space_for_cards.add_widget(MDLabel(
                 id = "tempID",
-                text = "You don't have any ToDo lists favourited, you can change this by pressing the star next to your ToDo lists!\n",
-                size_hint = (1, .7),
-                sapcing= "10dp",
-                pos_hint = {"y": 0.1}
-                
+                text = "You don't have any ToDo lists favourited, you can change this by pressing the star next to your ToDo lists!",
+                size_hint = (1, .8),               
             ))
             self.height = self.calc_height()
         elif len(self.ids.space_for_cards.children) == 2:
