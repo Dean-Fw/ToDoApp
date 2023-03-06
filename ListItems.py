@@ -24,7 +24,6 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         ScreenObject = self.screen_manager.current_screen # This is almost the ugliest most stupidest most dumbest solution, but it's all i got :/
 
         json_data_obj = JsonData("data.json")
-        print(ScreenObject.name)
         json_data_obj.remove_task(list_item.text.replace("[b]", "").replace("[/b]", "").replace("[s]", "").replace("[/s]",""), ScreenObject.name.replace("[b]", "").replace("[/b]", ""))
 
         print(f"Deleting item: {list_item.text}")
@@ -38,4 +37,3 @@ class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
 
 class ListCard(MDBoxLayout):
     pass
-

@@ -93,7 +93,6 @@ class LoadedToDoListPage(CreatedToDoListPage):
     def load_tasks(self, *largs):
         app = MDApp.get_running_app()
         jsonDataObject = JsonData("data.json")
-        print(self.name)
         parent_list_index = jsonDataObject.find_list(self.name.replace("[b]", "").replace("[/b]", ""))
         print(f"Parent list index: {parent_list_index}")
         self.create_loaded_object(jsonDataObject.data["lists"][parent_list_index]["tasks"])

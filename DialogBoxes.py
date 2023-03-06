@@ -45,7 +45,6 @@ class EditTaskDialogContent(DialogContent):
         self.ids.save_or_exit.add_widget(SaveEditedTaskButton())
          
     def edit_task(self):
-        print(self.ids.task_text.text)
         self.edit_JSON([self.ids.task_text.text, self.ids.date_text.text])
         self.parent_item.text = "[b]" + self.ids.task_text.text + "[/b]"
         self.parent_item.secondary_text = self.ids.date_text.text

@@ -118,20 +118,20 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
     def add_favourited_list_to_home(self):
         app = MDApp.get_running_app()
         list_card = self.create_card_for_favourited_list()
-        print(app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children)
         for child in app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children:
             if "FavouriteSpace" in str(child):
                 child.ids.space_for_cards.add_widget(list_card)
                 child.height = child.calc_height()
+                child.check_if_empty()
 
     def remove_favourited_list_from_home(self):
         card_id = self.text.replace("[b]","").replace("[/b]","")
         favourite_space = self.find_favourite_space_object()
         for child2 in favourite_space.ids.space_for_cards.children:
             if child2.id == card_id:
-                print(f"Test: {child2.id}, {card_id}")
                 favourite_space.ids.space_for_cards.remove_widget(child2)
                 favourite_space.height = favourite_space.calc_height()
+        favourite_space.check_if_empty()
 
     def find_favourite_space_object(self):
         app = MDApp.get_running_app()
