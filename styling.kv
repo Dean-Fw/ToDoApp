@@ -69,19 +69,18 @@ MDScreen:
 	
 	padding: "5dp"
 	size_hint_y: None
-    
-	Widget:
 	MDCard:
 		md_bg_color: "#2894f4"
 		MDBoxLayout:
 			padding: "10dp"
 			orientation: "vertical"
 			MDLabel:
-				text: "Favourited Lists:"
-				font_size: "20dp"	
+				markup: True
+				text: "[b][u]Favourited Lists:[/b][/u]"
+				font_size: "25dp"	
 				sapcing: "10dp"
-				size_hint: .9, .1
-				pos_hint: {"top": 0.5 + 0.1/2}
+				size_hint: .9, .3
+				pos_hint: {"top": 0.2}
 			MDList:
 				id: space_for_cards
 
