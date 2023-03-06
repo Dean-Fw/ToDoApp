@@ -125,17 +125,20 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
                 child.height = child.calc_height()
 
     def remove_favourited_list_from_home(self):
-        app = MDApp.get_running_app()
         card_id = self.text.replace("[b]","").replace("[/b]","")
+        favourite_space = self.find_favourite_space_object()
+        for child2 in favourite_space.ids.space_for_cards.children:
+            if child2.id == card_id:
+                print(f"Test: {child2.id}, {card_id}")
+                favourite_space.ids.space_for_cards.remove_widget(child2)
+                favourite_space.height = favourite_space.calc_height()
+
+    def find_favourite_space_object(self):
+        app = MDApp.get_running_app()
         for child in app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children:
             if "FavouriteSpace" in str(child):
-                for child2 in child.ids.space_for_cards.children:
-                    
-                    if child2.id == card_id:
-                        print(f"Test: {child2.id}, {card_id}")
-                        child.ids.space_for_cards.remove_widget(child2)
-                        child.height = child.calc_height()
-
+                return child
+    
     def find_list_details_in_Json(self):
         json_data_obj = JsonData("data.json")
         json_details = {}
