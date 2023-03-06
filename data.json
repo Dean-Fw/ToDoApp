@@ -29,11 +29,16 @@
         },
         {
             "list_name": "kmjnhbhbgvfdcx",
-            "favourited": true,
+            "favourited": false,
             "tasks": []
         },
         {
             "list_name": "Test",
+            "favourited": false,
+            "tasks": []
+        },
+        {
+            "list_name": "List 3",
             "favourited": true,
             "tasks": []
         }

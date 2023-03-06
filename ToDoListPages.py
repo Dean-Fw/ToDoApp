@@ -6,9 +6,11 @@ from kivy.clock import Clock
 from DialogBoxes import EditTaskDialogContent, CreateTaskDialogContent
 from ListItems import ListItemWithCheckbox
 from kivymd.app import MDApp
+from kivy.properties import StringProperty
 
 # Main screen for creating and managing list items 
-class CreatedToDoListPage(Screen):      
+class CreatedToDoListPage(Screen):   
+    previous = StringProperty()
     # variable to hold dialog object 
     dialog = None
     #open edit task dialog 
@@ -66,6 +68,14 @@ class CreatedToDoListPage(Screen):
         if parent_list.ids.star.icon == "star":
             return True
         return False
+    
+    def go_to_previous_screen(self):
+        app = MDApp.get_running_app()
+        if self.previous == "HomeScreen":
+            app.root.ids.topBar.title = "Home"
+        else:
+            app.root.ids.topBar.title = "Your ToDo Lists"
+        return self.previous
 
 # child class of ToDoListPage for use when loading in pages from JSON file
 class LoadedToDoListPage(CreatedToDoListPage):

@@ -76,6 +76,7 @@ class ToDoListView(MDScreen):
     def change_screen(self, list_name):
         app = MDApp.get_running_app()
         app.root.ids.topBar.title = list_name 
+        self.screen_manager.get_screen(list_name).previous = "ToDoListFeature"
         self.screen_manager.current = list_name
         print(f"Changing screen to: {self.screen_manager.current}")
 
