@@ -2,6 +2,8 @@ from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivymd.uix.scrollview import MDScrollView
 from kivy.properties import ObjectProperty
+from kivymd.uix.scrollview import MDScrollView
+from kivy.properties import ObjectProperty
 from ToDoListView import ToDoListView
 from HomeScreen import HomeScreen
 

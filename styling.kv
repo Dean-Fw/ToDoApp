@@ -7,7 +7,7 @@
                 root.nav_drawer.set_state("close")
                 root.screen_manager.current = "HomeScreen"
 				app.root.ids.topBar.title = "Home"
-			IconLeftWidget:
+			IconLeftWidgetWithoutTouch:
         		icon: "home"
 
         OneLineIconListItem:
@@ -17,7 +17,7 @@
                 root.screen_manager.current = "ToDoListFeature"
 				app.root.ids.topBar.title = "Your ToDo Lists"
 			
-			IconLeftWidget:
+			IconLeftWidgetWithoutTouch:
         		icon: "format-list-bulleted"
 
 MDScreen:
@@ -57,32 +57,64 @@ MDScreen:
 		orientation: "vertical"
 		Widget:
 			size_hint: 1, .1
-		MDLabel:
-			text: "Favourited Lists:"
-			font_size: "20dp"	
-			sapcing: "10dp"
-			size_hint: .9, .1
-			pos_hint: {"top": 0.5 + 0.1/2}
 		ScrollView:
 			pos_hint: {"center_y": .5, "center_x": .5}
 			size_hint: .9, .8
 			id: scroll_view
 			MDList:
 				id: home_list
+				FavouriteSpace:
+
+<FavouriteSpace>:
+	
+	padding: "5dp"
+	size_hint_y: None
+	MDCard:
+		on_release: 
+			app.root.ids.screen_manager.current = "ToDoListFeature"
+			app.root.ids.topBar.title = "Your ToDo lists"
+		md_bg_color: "#2894f4"
+		MDBoxLayout:
+			padding: "10dp"
+			orientation: "vertical"
+			MDLabel:
+				markup: True
+				text: "[b][u]Favourited Lists:[/b][/u]"
+				font_size: "25dp"	
+				sapcing: "10dp"
+				size_hint: .9, .3
+				pos_hint: {"top": 0.2}
+			MDList:
+				id: space_for_cards
 
 
 <ListCard>:
 	padding: "5dp"
 	size_hint_y: None
-	height: "50dp"
+	height: "100dp"
 	MDCard:
-		elevation: 2
-		size_hint: 1, 1
+		on_release: 
+			app.root.ids.screen_manager.current = list_name.text
+			app.root.ids.screen_manager.get_screen(list_name.text).previous = "HomeScreen"
+			app.root.ids.topBar.title = list_name.text
+		padding: "10dp"
 		MDBoxLayout:
+			orientation: "vertical"
 			MDLabel:
+				markup: True
+				font_size: "20dp"
 				id: list_name
+			MDLabel:
+				markup: True
+				font_size: "15dp"
+				id: list_count
+				pos_hint:{"x": .01}
+			MDLabel:
+				markup: True
+				font_size: "15dp"
+				id: total_complete
+				pos_hint:{"x": .01}
 			
-
 # ToDo List view Styling
 <ToDoListView>:
 	MDFloatLayout:	
@@ -130,7 +162,7 @@ MDScreen:
 		text_color: 33,150,243,1
 		on_release:
 			root.favourite_list()
-	
+
 	IconRightWidget:
 		icon: "trash-can-outline"
 		theme_text_color: "Custom"
@@ -157,12 +189,6 @@ MDScreen:
 
 <CreatedToDoListPage>:
 	MDFloatLayout:
-		#MDLabel:
-		#	id: ToDoListName
-		#	halign: "left"
-		#	padding: [10,0]
-		#	markup: True
-		#	pos_hint: {"y": .45}
 
 		ScrollView:
 			pos_hint: {"center_y": .5, "center_x": .5}
@@ -173,11 +199,10 @@ MDScreen:
 
 		MDRectangleFlatIconButton:
 			icon: "keyboard-backspace"
-			text: "Return to ToDo list view"
+			text: "Return to Previous screen"
 			pos_hint: {"x": .05, "y":.05}
 			on_release: 
-				app.root.ids.screen_manager.current = "ToDoListFeature"
-				app.root.ids.topBar.title = "Your ToDo lists"
+				app.root.ids.screen_manager.current = root.go_to_previous_screen()
 
 		MDFloatingActionButton:
 			icon: "plus-thick"
@@ -190,13 +215,11 @@ MDScreen:
 	id: save_button
     text: "SAVE"
     on_release: (root.parent.parent.edit_task(), app.root.ids.screen_manager.current_screen.close_dialog())
-	#on_release: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
         
 <SaveNewTaskButton>:
 	id: save_button
 	text: "SAVE"
 	on_release: (root.parent.parent.add_task(), app.root.ids.screen_manager.current_screen.close_dialog())
-	#on_release: (app.root.current_screen.add_task(task_text, date_text), app.root.current_screen.close_dialog())
 
 <DialogContent>:
     orientation: "vertical"
@@ -225,10 +248,3 @@ MDScreen:
 		MDFlatButton:
             text: 'CANCEL'
             on_release: app.root.ids.screen_manager.current_screen.close_dialog()
-		
-
-		
-
-        
-
-

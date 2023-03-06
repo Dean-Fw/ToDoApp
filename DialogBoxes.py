@@ -45,7 +45,6 @@ class EditTaskDialogContent(DialogContent):
         self.ids.save_or_exit.add_widget(SaveEditedTaskButton())
          
     def edit_task(self):
-        print(self.ids.task_text.text)
         self.edit_JSON([self.ids.task_text.text, self.ids.date_text.text])
         self.parent_item.text = "[b]" + self.ids.task_text.text + "[/b]"
         self.parent_item.secondary_text = self.ids.date_text.text
@@ -69,19 +68,19 @@ class CreateTaskDialogContent(DialogContent):
         task_name = self.ids.task_text
         task_deadline = self.ids.date_text
         
-        app = MDApp.get_running_app()
-
         json_data_obj = JsonData("data.json")
         print(f"Creating task: {task_name.text, task_deadline.text}")
-        
-        app.root.ids.screen_manager.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
-        parent_list = app.root.ids.screen_manager.current_screen.name.replace("[b]", "").replace("[/b]","")
+
+        self.screen_manager.current_screen.ids["Container"].add_widget(ListItemWithCheckbox(self.screen_manager, text="[b]"+task_name.text+"[/b]", secondary_text=task_deadline.text))
+        parent_list = self.screen_manager.current_screen.name.replace("[b]", "").replace("[/b]","")
         
         task_json = {"task_name":task_name.text, "completed":False, "task_date": task_deadline.text}
         json_data_obj.append_new_task(task_json, parent_list)
         
         task_name.text = ""
         task_deadline.text = ""
+        
+        self.screen_manager.current_screen.adjust_home_screen_content(json_data_obj, "Length")
 
 class CreateListDialog(MDBoxLayout):
     def __init__(self, screen_manager, *args, **kwargs):
