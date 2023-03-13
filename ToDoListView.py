@@ -121,8 +121,8 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
         for child in app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children:
             if "FavouriteSpace" in str(child):
                 child.ids.space_for_cards.add_widget(list_card)
-                child.height = child.calc_height()
                 child.check_if_empty()
+                child.height = child.calc_height()       
 
     def remove_favourited_list_from_home(self):
         card_id = self.text.replace("[b]","").replace("[/b]","")
@@ -132,6 +132,7 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
                 favourite_space.ids.space_for_cards.remove_widget(child2)
                 favourite_space.height = favourite_space.calc_height()
         favourite_space.check_if_empty()
+        favourite_space.height = favourite_space.calc_height()
 
     def find_favourite_space_object(self):
         app = MDApp.get_running_app()

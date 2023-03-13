@@ -24,10 +24,10 @@ class FavouriteSpace(MDBoxLayout):
             for child in self.ids.space_for_cards.children:
                 if "MDLabel" in str(child) :
                     self.ids.space_for_cards.remove_widget(child)
-                    self.height = self.calc_height()
+
 
     def calc_height(self):
-        height = len(self.ids.space_for_cards.children) * 100
-        return str(height + 60) + "dp"
+        height = (len(self.ids.space_for_cards.children) * 100) + 100
+        return str(height) + "dp"
         
                 
