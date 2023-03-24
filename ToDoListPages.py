@@ -19,7 +19,8 @@ class CreatedToDoListPage(Screen):
             self.dialog = MDDialog ( # define one 
                 title="Edit Task",
                 type="custom",
-                content_cls=EditTaskDialogContent(object)
+                content_cls=EditTaskDialogContent(object),
+                auto_dismiss = False
             )
         self.dialog.open() # open the dialog 
     # opens task creation dialog box 
@@ -28,7 +29,8 @@ class CreatedToDoListPage(Screen):
             self.dialog = MDDialog ( # define one 
                 title="Create Task",
                 type="custom",
-                content_cls=CreateTaskDialogContent(screen_manager)
+                content_cls=CreateTaskDialogContent(screen_manager),
+                auto_dismiss = False
             )
         self.dialog.open() # open the dialog 
     # closes dialog box
