@@ -52,9 +52,9 @@ class CreatedToDoListPage(Screen):
         for favourite in child.ids.space_for_cards.children:
             if favourite.id == parent_list.text.replace("[b]","").replace("[/b]",""):
                 if type == "add":
-                    favourite.ids.boxlayout_in_card.add_widget(OneLineAvatarIconListItem(text=list_item))
+                    favourite.ids.Container.add_widget(OneLineAvatarIconListItem(text=list_item))
                     favourite.height = favourite.calc_height()
-                elif type == "Complete":
+                elif type == "remove":
                     favourite.ids.total_complete.text = "[i]Total Tasks completed : " + str(self.find_total_completed_tasks(json_data_obj,parent_list_index)) + "[/i]"
 
     def find_home_list(self):

@@ -29,7 +29,7 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         print(f"Deleting item: {list_item.text}")
         self.parent.remove_widget(list_item)
 
-        self.screen_manager.current_screen.adjust_home_screen_content(json_data_obj, "Length")
+        self.screen_manager.current_screen.adjust_home_screen_content(json_data_obj, list_item.text.replace("[b]", "").replace("[/b]", "").replace("[s]", "").replace("[/s]",""), "remove")
         
 # Checkbox for list items 
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
@@ -37,5 +37,6 @@ class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
 
 class ListCard(MDBoxLayout):
     def calc_height(self):
-        height = (len(self.ids.Container.children) * 72) + 100
+        print(len(self.ids.Container.children))
+        height = (len(self.ids.Container.children) * 55) + 100
         return str(height) + "dp"
