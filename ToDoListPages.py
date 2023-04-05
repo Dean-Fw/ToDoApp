@@ -40,24 +40,40 @@ class CreatedToDoListPage(Screen):
         self.dialog.dismiss()
         self.dialog = None
 
-    def adjust_home_screen_content(self, json_data_obj,type, list_item):
+    def adjust_home_screen_content(self, json_data_obj,operation, list_item):
         parent_list = self.find_parent_list()
         is_list_favourited = self.check_if_list_is_favourited(parent_list)
         parent_list_index = json_data_obj.find_list(parent_list.text.replace("[b]","").replace("[/b]",""))
         if is_list_favourited:
-            self.make_change_to_screen(json_data_obj,type, list_item, parent_list)
+            self.make_change_to_screen(operation, list_item, parent_list)
     
-    def make_change_to_screen(self, json_data_obj, type, list_item, parent_list):
-        child = self.find_home_list()
+    def find_list_item_to_remove(self, card, item_name):
+        for child in card.ids.Container.children:
+            if child.text == item_name:
+                return child
+
+    def adjust_favouriteSpace_card_height(self, app):
+        home_list_object = app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list
+        for x in home_list_object.children:
+            if x.ids.card_title.text == "[b][u]Favourited Lists:[/b][/u]":
+                x.height = x.calc_height()
+
+    def make_change_to_screen(self, operation, list_item, parent_list):
+        app = MDApp.get_running_app()
+        child = self.find_home_list(app)
         for favourite in child.ids.space_for_cards.children:
             if favourite.id == parent_list.text.replace("[b]","").replace("[/b]",""):
-                if type == "add":
+                if operation == "add":
                     favourite.ids.Container.add_widget(OneLineAvatarIconListItem(text=list_item))
                     favourite.height = favourite.calc_height()
-                elif type == "remove":
-                    favourite.ids.total_complete.text = "[i]Total Tasks completed : " + str(self.find_total_completed_tasks(json_data_obj,parent_list_index)) + "[/i]"
+                    self.adjust_favouriteSpace_card_height(app)
+                elif operation == "remove":
+                    list_item_to_remove = self.find_list_item_to_remove(favourite, list_item)
+                    favourite.ids.Container.remove_widget(list_item_to_remove)
+                    favourite.height = favourite.calc_height()
+                    self.adjust_favouriteSpace_card_height(app)
 
-    def find_home_list(self):
+    def find_home_list(self, app):
         app = MDApp.get_running_app()
         for child in app.root.ids.screen_manager.get_screen("HomeScreen").ids.home_list.children:
             if "FavouriteSpace" in str(child):
