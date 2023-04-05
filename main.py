@@ -6,6 +6,7 @@ from kivymd.uix.scrollview import MDScrollView
 from kivy.properties import ObjectProperty
 from ToDoListView import ToDoListView
 from HomeScreen import HomeScreen
+from Notespage import NoteScreen
 
 
 class ContentNavigationDrawer(MDScrollView):

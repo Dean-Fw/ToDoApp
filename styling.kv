@@ -20,6 +20,16 @@
 			IconLeftWidgetWithoutTouch:
         		icon: "format-list-bulleted"
 
+		OneLineIconListItem:
+            text: "Notes"
+            on_press:
+                root.nav_drawer.set_state("close")
+                root.screen_manager.current = "NotesScreen"
+				app.root.ids.topBar.title = "Your Notes"
+			
+			IconLeftWidgetWithoutTouch:
+        		icon: "format-list-bulleted"
+
 MDScreen:
 
     MDTopAppBar:
@@ -43,6 +53,11 @@ MDScreen:
 				screen_manager: screen_manager
                 name: "ToDoListFeature"
 
+			NoteScreen:
+				id: NotesPage
+				screen_manager: screen_manager
+				name: "NotesScreen"
+
         MDNavigationDrawer:
             id: nav_drawer
             radius: (0, 16, 16, 0)
@@ -50,6 +65,12 @@ MDScreen:
             ContentNavigationDrawer:
                 screen_manager: screen_manager
                 nav_drawer: nav_drawer
+
+# NoteScreen  Styling
+<NoteScreen>:
+	MDLabel:
+		text: "Notes"
+
 
 # HomeScreen Styling
 <HomeScreen>:
@@ -66,7 +87,6 @@ MDScreen:
 				FavouriteSpace:
 
 <FavouriteSpace>:
-	
 	padding: "5dp"
 	size_hint_y: None
 	MDCard:
@@ -101,21 +121,15 @@ MDScreen:
 			app.root.ids.topBar.title = list_name.text
 		padding: "10dp"
 		MDBoxLayout:
+			id: boxlayout_in_card
 			orientation: "vertical"
 			MDLabel:
 				markup: True
 				font_size: "20dp"
 				id: list_name
-			MDLabel:
-				markup: True
-				font_size: "15dp"
-				id: list_count
-				pos_hint:{"x": .01}
-			MDLabel:
-				markup: True
-				font_size: "15dp"
-				id: total_complete
-				pos_hint:{"x": .01}
+			MDList:
+				id:Container
+ 
 			
 # ToDo List view Styling
 <ToDoListView>:

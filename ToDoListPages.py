@@ -7,6 +7,8 @@ from DialogBoxes import EditTaskDialogContent, CreateTaskDialogContent
 from ListItems import ListItemWithCheckbox
 from kivymd.app import MDApp
 from kivy.properties import StringProperty
+from kivymd.uix.label import MDLabel
+from kivymd.uix.list import OneLineAvatarIconListItem
 
 # Main screen for creating and managing list items 
 class CreatedToDoListPage(Screen):   
@@ -38,19 +40,20 @@ class CreatedToDoListPage(Screen):
         self.dialog.dismiss()
         self.dialog = None
 
-    def adjust_home_screen_content(self, json_data_obj,type):
+    def adjust_home_screen_content(self, json_data_obj,type, list_item):
         parent_list = self.find_parent_list()
         is_list_favourited = self.check_if_list_is_favourited(parent_list)
         parent_list_index = json_data_obj.find_list(parent_list.text.replace("[b]","").replace("[/b]",""))
         if is_list_favourited:
-            self.make_change_to_screen(json_data_obj, parent_list, parent_list_index,type)
+            self.make_change_to_screen(json_data_obj,type, list_item, parent_list)
     
-    def make_change_to_screen(self,json_data_obj, parent_list, parent_list_index, type):
+    def make_change_to_screen(self, json_data_obj, type, list_item, parent_list):
         child = self.find_home_list()
         for favourite in child.ids.space_for_cards.children:
             if favourite.id == parent_list.text.replace("[b]","").replace("[/b]",""):
-                if type == "Length":
-                    favourite.ids.list_count.text = "[i]Total Tasks : "+ str(len(json_data_obj.data["lists"][parent_list_index]["tasks"])) +"[/i]"
+                if type == "add":
+                    favourite.ids.boxlayout_in_card.add_widget(OneLineAvatarIconListItem(text=list_item))
+                    favourite.height = favourite.calc_height()
                 elif type == "Complete":
                     favourite.ids.total_complete.text = "[i]Total Tasks completed : " + str(self.find_total_completed_tasks(json_data_obj,parent_list_index)) + "[/i]"
 

@@ -8,7 +8,7 @@ from DialogBoxes import CreateListDialog
 from kivymd.uix.list import OneLineAvatarIconListItem
 from kivymd.app import MDApp
 from kivy.properties import ObjectProperty
-from ListItems import ListCard
+from ListItems import ListCard, ListItemWithCheckbox
 
 class ToDoListView(MDScreen):
     def __init__(self,**kw):
@@ -110,9 +110,15 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
         list_details = self.find_list_details_in_Json()
         list_card = ListCard()
         list_card.id = self.text.replace("[b]", "").replace("[/b]", "")
+        
         list_card.ids.list_name.text = self.text
-        list_card.ids.list_count.text = "[i]Total Tasks : " + str(list_details["list_length"]) + "[/i]"
-        list_card.ids.total_complete.text = "[i]Total Tasks completed : " + str(list_details["total_complete"]) + "[/i]"
+        
+        for x in list_details:
+            listItem = OneLineAvatarIconListItem(id = x, text = x)
+            list_card.ids.Container.add_widget(listItem)
+
+        list_card.height = list_card.calc_height()
+
         return list_card
 
     def add_favourited_list_to_home(self):
@@ -141,13 +147,20 @@ class ListItemWithoutCheckbox(OneLineAvatarIconListItem):
                 return child
     
     def find_list_details_in_Json(self):
+        # take list content, format it and return it 
         json_data_obj = JsonData("data.json")
-        json_details = {}
         list_index = json_data_obj.find_list(self.text.replace("[b]","").replace("[/b]",""))
-        list_total_complete = self.find_total_completed_tasks(json_data_obj, list_index)
-        json_details["list_length"] = len(json_data_obj.data["lists"][list_index]["tasks"])
-        json_details["total_complete"] = list_total_complete
-        return json_details
+        
+        list_content = json_data_obj.data["lists"][list_index]["tasks"]
+        list_content_formatted = []
+
+        for x in list_content:
+            if x["completed"]:
+                list_content_formatted.append("[s]" + x["task_name"] + "[/s]")
+            else:
+                list_content_formatted.append(x["task_name"])
+
+        return list_content_formatted
     
     def find_total_completed_tasks(self, json_data_obj, list_index):
         list_total_complete = 0

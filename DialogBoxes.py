@@ -80,7 +80,7 @@ class CreateTaskDialogContent(DialogContent):
         task_name.text = ""
         task_deadline.text = ""
         
-        self.screen_manager.current_screen.adjust_home_screen_content(json_data_obj, "Length")
+        self.screen_manager.current_screen.adjust_home_screen_content(json_data_obj, "add", task_json["task_name"])
 
 class CreateListDialog(MDBoxLayout):
     def __init__(self, screen_manager, *args, **kwargs):

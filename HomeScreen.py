@@ -27,7 +27,10 @@ class FavouriteSpace(MDBoxLayout):
 
 
     def calc_height(self):
-        height = (len(self.ids.space_for_cards.children) * 100) + 100
-        return str(height) + "dp"
+        total_height = 0
+        for x in self.ids.space_for_cards.children:
+            total_height += x.height
+
+        return str(total_height + 100) + "dp"
         
                 
