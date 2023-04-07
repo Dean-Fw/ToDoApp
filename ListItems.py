@@ -37,5 +37,8 @@ class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
 
 class ListCard(MDBoxLayout):
     def calc_height(self):
-        height = (len(self.ids.Container.children) * 55) + 100
-        return str(height) + "dp"
+        total_height = 0
+        for x in self.ids.Container.children:
+            total_height += x.height
+        # height = (len(self.ids.Container.children) * 55) + 100
+        return str(total_height + 100) + "dp"

@@ -30,7 +30,7 @@ class FavouriteSpace(MDBoxLayout):
         total_height = 0
         for x in self.ids.space_for_cards.children:
             total_height += x.height
-
-        return str(total_height + 100) + "dp"
+            
+        return str(total_height+100) + "dp"
         
                 
