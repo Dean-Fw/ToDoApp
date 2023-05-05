@@ -70,6 +70,7 @@ class HomeScreen(MDScreen):
                 print("image")
                 new_card = ImageCard(path)
                 new_card.ids.image_space.source = path
+                new_card.calculate_height()
                 self.ids.Container.add_widget(new_card)
             self.close_manager()
 

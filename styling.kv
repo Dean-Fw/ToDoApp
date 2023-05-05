@@ -425,7 +425,18 @@ MDScreen:
                 id: deadline
 
 <ImageCard>:
+    md_bg_color: "#2894f4"
     size_hint: 1, None
     height: "125dp"
-    Image:
-        id: image_space
+    MDBoxLayout:
+        orientation: "vertical"
+        MDIconButton:
+            pos_hint: {"right": 1}
+            size_hint_x: .1
+            id: options_button
+            #on_release: root.open_drop_menu()
+            icon: "dots-horizontal"
+        Image:
+            id: image_space
+            allow_stretch: True
+            keep_ratio: False
