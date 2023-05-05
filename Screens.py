@@ -8,12 +8,18 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.pickers import MDDatePicker
+from kivymd.uix.filemanager import MDFileManager
+
+import os
 
 from ToDoCard import ProjectCard, ToDoListcard
 from NoteCard import NoteCard
+from ImageCard import ImageCard
 
 class HomeScreen(MDScreen):
         menu = None
+        dialog_box = None
+        file_manager = None
         # method that opens a menu allowing the user to create an object of choice 
         def open_dropdown_menu(self):
             menu_items = [
@@ -35,7 +41,7 @@ class HomeScreen(MDScreen):
                 {
                     "text": f"Add image",
                     "viewclass": "OneLineListItem",
-                    "on_release": lambda x=f"Add image": self.test(),
+                    "on_release": lambda x=f"Add image": self.open_file_manager(),
                 } 
             ]
             self.menu = MDDropdownMenu(
@@ -45,11 +51,27 @@ class HomeScreen(MDScreen):
             )
             self.menu.open()
         
-        def test(self):
-            print("test")
-            self.menu.dismiss()
+        def open_file_manager(self):
+            path = os.path.expanduser("~")
+            self.file_manager = MDFileManager(
+                exit_manager = self.close_manager,
+                select_path = self.select_path,
+                preview = True
+            )
+            self.file_manager.show(path)
         
-        dialog_box = None
+        def close_manager(self, *args):
+            self.file_manager.close()
+            self.file_manager = None
+
+        def select_path(self, path: str):
+            print(path)
+            if ".jpeg" or ".png" or ".jpeg" in path:
+                print("image")
+                new_card = ImageCard(path)
+                new_card.ids.image_space.source = path
+                self.ids.Container.add_widget(new_card)
+            self.close_manager()
 
         # opens a dialog box to allow a user to 
         def open_create_project_dialog(self):
