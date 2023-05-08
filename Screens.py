@@ -52,6 +52,8 @@ class HomeScreen(MDScreen):
         self.menu.open()
     
     def open_file_manager(self):
+        self.menu.dismiss()
+        self.menu = None
         path = os.path.expanduser("~")
         self.file_manager = MDFileManager(
             exit_manager = self.close_manager,
@@ -67,9 +69,8 @@ class HomeScreen(MDScreen):
         if ".jpeg" or ".png" or ".jpeg" in path:
             new_card = ImageCard()
             new_card.ids.image_space.source = path
-            
+            new_card.ids.image_title.text = path
             self.ids.Container.add_widget(new_card)
-            new_card.calculate_height()
         self.close_manager()
     # opens a dialog box to allow a user to 
     def open_create_project_dialog(self):

@@ -322,6 +322,22 @@ MDScreen:
         text: 'CANCEL'
         on_release: root.close_dialog()
 
+<MoveImageDialog>:
+    orientation: "vertical"
+    padding: "5dp"
+    size_hint: 1, None
+	height: "200dp"
+    MDScrollView:
+        MDList:
+            id: list_of_projects
+            OneLineListItem:
+                text: "Create new project"
+                on_release: 
+                    root.create_new_project()
+    MDFlatButton:
+        text: 'CANCEL'
+        on_release: root.close_dialog()
+
 # Card Stylings
 <ProjectCard>:
     id: project_card
@@ -431,12 +447,20 @@ MDScreen:
     height: "200dp"
     MDBoxLayout:
         orientation: "vertical"
-        MDIconButton:
-            pos_hint: {"right": 1}
-            size_hint_x: .1
-            id: options_button
-            #on_release: root.open_drop_menu()
-            icon: "dots-horizontal"
+        MDGridLayout:
+            size_hint_y: .2
+            pos_hint: {"top": 1}
+            cols: 2 
+            MDLabel:
+                id: image_title
+                font_size: "25dp"
+                bold: True
+            MDIconButton:
+                pos_hint: {"right": 1}
+                size_hint_x: .1
+                id: options_button
+                on_release: root.open_drop_menu()
+                icon: "dots-horizontal"
         Image:
             id: image_space
             allow_stretch: False
