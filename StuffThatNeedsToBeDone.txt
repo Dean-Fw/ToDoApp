@@ -1,0 +1,6 @@
+- Create method for deleting projects
+- Implement storage
+- sort out image cards
+	- Title card the image name
+	- sort out the stretching issue
+

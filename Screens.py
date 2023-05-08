@@ -17,105 +17,99 @@ from NoteCard import NoteCard
 from ImageCard import ImageCard
 
 class HomeScreen(MDScreen):
-        menu = None
-        dialog_box = None
-        file_manager = None
-        # method that opens a menu allowing the user to create an object of choice 
-        def open_dropdown_menu(self):
-            menu_items = [
-                {
-                    "text": f"Add a Project",
-                    "viewclass": "OneLineListItem",
-                    "on_release": lambda x=f"Add a Project": self.open_create_project_dialog(),
-                },
-                {
-                    "text": f"Add a To do list",
-                    "viewclass": "OneLineListItem",
-                    "on_release": lambda x=f"Add a To do list": self.open_create_list_dialog(),
-                },
-                {
-                    "text": f"Add a Note",
-                    "viewclass": "OneLineListItem",
-                    "on_release": lambda x=f"Add a Note": self.open_create_note_dialog(),
-                },  
-                {
-                    "text": f"Add image",
-                    "viewclass": "OneLineListItem",
-                    "on_release": lambda x=f"Add image": self.open_file_manager(),
-                } 
-            ]
-            self.menu = MDDropdownMenu(
-                caller=self.ids.plus_button,
-                items=menu_items,
-                width_mult=4,
+    menu = None
+    dialog_box = None
+    file_manager = None
+    # method that opens a menu allowing the user to create an object of choice 
+    def open_dropdown_menu(self):
+        menu_items = [
+            {
+                "text": f"Add a Project",
+                "viewclass": "OneLineListItem",
+                "on_release": lambda x=f"Add a Project": self.open_create_project_dialog(),
+            },
+            {
+                "text": f"Add a To do list",
+                "viewclass": "OneLineListItem",
+                "on_release": lambda x=f"Add a To do list": self.open_create_list_dialog(),
+            },
+            {
+                "text": f"Add a Note",
+                "viewclass": "OneLineListItem",
+                "on_release": lambda x=f"Add a Note": self.open_create_note_dialog(),
+            },  
+            {
+                "text": f"Add image",
+                "viewclass": "OneLineListItem",
+                "on_release": lambda x=f"Add image": self.open_file_manager(),
+            } 
+        ]
+        self.menu = MDDropdownMenu(
+            caller=self.ids.plus_button,
+            items=menu_items,
+            width_mult=4,
+        )
+        self.menu.open()
+    
+    def open_file_manager(self):
+        path = os.path.expanduser("~")
+        self.file_manager = MDFileManager(
+            exit_manager = self.close_manager,
+            select_path = self.select_path,
+            preview = True
+        )
+        self.file_manager.show(path)
+    
+    def close_manager(self, *args):
+        self.file_manager.close()
+        self.file_manager = None
+    def select_path(self, path: str):
+        if ".jpeg" or ".png" or ".jpeg" in path:
+            new_card = ImageCard()
+            new_card.ids.image_space.source = path
+            
+            self.ids.Container.add_widget(new_card)
+            new_card.calculate_height()
+        self.close_manager()
+    # opens a dialog box to allow a user to 
+    def open_create_project_dialog(self):
+        if self.menu:
+            self.menu.dismiss()      
+         # Opens Dialog box that allows for the creation of classes
+        if not self.dialog_box: # if a dialog does not exits 
+            self.dialog_box = MDDialog( # define one 
+                title="Create a Project",
+                type="custom",
+                content_cls=CreateProjectDialog(self),
+                auto_dismiss = False
             )
-            self.menu.open()
-        
-        def open_file_manager(self):
-            path = os.path.expanduser("~")
-            self.file_manager = MDFileManager(
-                exit_manager = self.close_manager,
-                select_path = self.select_path,
-                preview = True
+        self.dialog_box.open() # open the dialog 
+    def open_create_list_dialog(self):
+        self.menu.dismiss()
+         # Opens Dialog box that allows for the creation of classes
+        if not self.dialog_box: # if a dialog does not exits 
+            self.dialog_box = MDDialog( # define one 
+                title="Create a to do list",
+                type="custom",
+                content_cls=CreateListDialog(self),
+                auto_dismiss = False
             )
-            self.file_manager.show(path)
-        
-        def close_manager(self, *args):
-            self.file_manager.close()
-            self.file_manager = None
-
-        def select_path(self, path: str):
-            print(path)
-            if ".jpeg" or ".png" or ".jpeg" in path:
-                print("image")
-                new_card = ImageCard(path)
-                new_card.ids.image_space.source = path
-                new_card.calculate_height()
-                self.ids.Container.add_widget(new_card)
-            self.close_manager()
-
-        # opens a dialog box to allow a user to 
-        def open_create_project_dialog(self):
-            if self.menu:
-                self.menu.dismiss()      
-             # Opens Dialog box that allows for the creation of classes
-            if not self.dialog_box: # if a dialog does not exits 
-                self.dialog_box = MDDialog( # define one 
-                    title="Create a Project",
-                    type="custom",
-                    content_cls=CreateProjectDialog(self),
-                    auto_dismiss = False
-                )
-            self.dialog_box.open() # open the dialog 
-
-        def open_create_list_dialog(self):
-            self.menu.dismiss()
-             # Opens Dialog box that allows for the creation of classes
-            if not self.dialog_box: # if a dialog does not exits 
-                self.dialog_box = MDDialog( # define one 
-                    title="Create a to do list",
-                    type="custom",
-                    content_cls=CreateListDialog(self),
-                    auto_dismiss = False
-                )
-            self.dialog_box.open() # open the dialog 
-
-        def open_create_note_dialog(self):
-            self.menu.dismiss()
-             # Opens Dialog box that allows for the creation of classes
-            if not self.dialog_box: # if a dialog does not exits 
-                self.dialog_box = MDDialog( # define one 
-                    title="Create a Note!",
-                    type="custom",
-                    content_cls=CreateNoteDialog(self),
-                    auto_dismiss = False
-                )
-            self.dialog_box.open() # open the dialog 
-
-    # Closes dialog box 
-        def close_dialog(self):
-            self.dialog_box.dismiss()
-            self.dialog_box = None
+        self.dialog_box.open() # open the dialog 
+    def open_create_note_dialog(self):
+        self.menu.dismiss()
+         # Opens Dialog box that allows for the creation of classes
+        if not self.dialog_box: # if a dialog does not exits 
+            self.dialog_box = MDDialog( # define one 
+                title="Create a Note!",
+                type="custom",
+                content_cls=CreateNoteDialog(self),
+                auto_dismiss = False
+            )
+        self.dialog_box.open() # open the dialog 
+# Closes dialog box 
+    def close_dialog(self):
+        self.dialog_box.dismiss()
+        self.dialog_box = None
 
 class UserCreatedProjectListItem(MDNavigationDrawerItem):
     pass

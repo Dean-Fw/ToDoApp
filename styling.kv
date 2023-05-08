@@ -1,6 +1,7 @@
 <UserCreatedProjectListItem>:
     icon: "folder"
     text: ""
+    color: 1,1,1,1
     on_release:
         app.root.ids.nav_drawer.set_state("close")
         app.root.ids.screen_manager.current = self.text
@@ -427,7 +428,7 @@ MDScreen:
 <ImageCard>:
     md_bg_color: "#2894f4"
     size_hint: 1, None
-    height: "125dp"
+    height: "200dp"
     MDBoxLayout:
         orientation: "vertical"
         MDIconButton:
@@ -438,5 +439,5 @@ MDScreen:
             icon: "dots-horizontal"
         Image:
             id: image_space
-            allow_stretch: True
-            keep_ratio: False
+            allow_stretch: False
+            keep_ratio: True    
