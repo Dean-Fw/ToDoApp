@@ -28,6 +28,7 @@ class HomeScreen(MDScreen):
     screen_data = json_file["screens"][0]["cards"]
     screen_index = 0
     
+    
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
         Clock.schedule_once(partial(self.load_items, self.screen_data))
@@ -127,6 +128,7 @@ class HomeScreen(MDScreen):
                 auto_dismiss = False
             )
         self.dialog_box.open() # open the dialog 
+    
     def open_create_list_dialog(self):
         self.menu.dismiss()
          # Opens Dialog box that allows for the creation of classes
@@ -174,12 +176,19 @@ class CreateProjectDialog(MDBoxLayout):
         
         # check whether a screen already exists with the same name and show an error dialog if so
         if project_name not in app.root.ids.screen_manager.screen_names:
-            app.root.ids.screen_manager.add_widget(ProjectScreen(app.root.ids.screen_manager.current_screen,name = project_name))
+            app.root.ids.screen_manager.add_widget(ProjectScreen(app.root.ids.screen_manager.current_screen, len(JsonData("data.json").data["screens"]),name = project_name))
             self.screen_called_from.ids.Container.add_widget(new_project_card)
+            print(self.screen_called_from.screen_index)
+            
+            json_string_card = {"type":"project", "content":{"project_name":project_name}}
+            json_string_screen = {"name":project_name, "previous":app.root.ids.screen_manager.current_screen.name,"cards":[]}
+            JsonData("data.json").append_new_card(self.screen_called_from.screen_index, json_string_card)
+            JsonData("data.json").append_new_screen(json_string_screen)
+
             if app.root.ids.topBar.title == "Home":
                 app.root.ids.nav_menu.add_widget(UserCreatedProjectListItem(text = project_name))
-            else:
-                self.show_error_dialog("Error: You already have a project called \"" + project_name + "\"")
+        else:
+            self.show_error_dialog("Error: You already have a project called \"" + project_name + "\"")
         
         self.ids.project_name_input.text = ""
 
@@ -304,9 +313,10 @@ class CreateNoteDialog(MDBoxLayout):
         self.ids.date_text.text = str(date)
 
 class ProjectScreen(HomeScreen):
-    def __init__(self, previous_screen,*args, **kwargs):
+    def __init__(self, previous_screen, index,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.previous = previous_screen
+        self.screen_index = index
     
     def load_items(self, screen_cards, *largs): # This is bad but it works ...
         pass
