@@ -9,17 +9,45 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.pickers import MDDatePicker
 from kivymd.uix.filemanager import MDFileManager
+from kivy.clock import Clock
 
 import os
+from functools import partial
 
-from ToDoCard import ProjectCard, ToDoListcard
-from NoteCard import NoteCard
-from ImageCard import ImageCard
+from ToDoCard import ProjectCard, LoadedProjectCard, ToDoListcard, LoadedToDoListCard
+from NoteCard import NoteCard, LoadedNoteCard
+from ImageCard import ImageCard, LoadedImageCard
+from JSON_Interface import JsonData
+
 
 class HomeScreen(MDScreen):
-    menu = None
-    dialog_box = None
-    file_manager = None
+
+    def __init__(self,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.menu = None
+        self.dialog_box = None
+        self.file_manager = None
+        self.json_obj = JsonData("data.json")
+
+        Clock.schedule_once(partial(self.load_items))
+    
+    def load_items(self, *largs):
+        for i in self.json_obj.data["screens"][0]["cards"]:
+            if i["type"] == "note":
+                card_to_load = LoadedNoteCard(i["content"])
+                self.ids.Container.add_widget(card_to_load)
+            elif i["type"] == "image":
+                card_to_load = LoadedImageCard(i["content"])
+                self.ids.Container.add_widget(card_to_load)
+            elif i["type"] == "list":
+                card_to_load = LoadedToDoListCard(i["content"])
+                self.ids.Container.add_widget(card_to_load)
+            elif i["type"] == "project":
+                card_to_load = LoadedProjectCard(i["content"])
+                self.ids.Container.add_widget(card_to_load)
+
+            
+
     # method that opens a menu allowing the user to create an object of choice 
     def open_dropdown_menu(self):
         menu_items = [

@@ -6,6 +6,7 @@ from kivymd.uix.pickers import MDDatePicker
 from kivymd.app import MDApp
 from kivy.clock import Clock
 from kivymd.uix.list import OneLineListItem
+from functools import partial
 
 class NoteCard(MDCard):
     options_menu = None
@@ -150,3 +151,15 @@ class ProjectListItem(OneLineListItem):
         self.card_called_from.parent.remove_widget(self.card_called_from)
         self.project_screen.ids.Container.add_widget(self.card_called_from)
         self.card_called_from.close_dialog()   
+
+class LoadedNoteCard(NoteCard):
+    def __init__(self, content,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        Clock.schedule_once(partial(self.apply_content))
+        self.loaded_content = content
+        
+    def apply_content (self, *largs):
+        self.ids.note_title.text = self.loaded_content["note_title"]
+        self.ids.note.text = self.loaded_content["note"]
+        self.ids.deadline.text = self.loaded_content["deadline"]
+        self.calculate_height()

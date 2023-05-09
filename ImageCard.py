@@ -8,6 +8,7 @@ from kivymd.app import MDApp
 from kivy.clock import Clock
 from kivymd.uix.filemanager import MDFileManager
 
+from functools import partial
 import os
 
 class ImageCard(MDCard):
@@ -123,3 +124,13 @@ class ProjectListItem(OneLineListItem):
         self.card_called_from.parent.remove_widget(self.card_called_from)
         self.project_screen.ids.Container.add_widget(self.card_called_from)
         self.card_called_from.close_dialog()   
+
+class LoadedImageCard(ImageCard):
+    def __init__(self,content, *args,**kwargs):
+        super().__init__(*args, **kwargs)
+        self.loaded_content = content
+        Clock.schedule_once(partial(self.apply_content))
+
+    def apply_content(self, *largs):
+        self.ids.image_space.source = self.loaded_content["source"]
+        self.ids.image_title.text = self.loaded_content["name"] 

@@ -8,8 +8,20 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivymd.app import MDApp
 from kivy.clock import Clock
 
+from functools import partial
+
+
 class ProjectCard(MDCard):
     pass
+
+class LoadedProjectCard(ProjectCard):
+    def __init__(self, content, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.loaded_content = content
+        Clock.schedule_once(partial(self.apply_content))
+
+    def apply_content(self, *largs):
+        self.ids.project_title.text = self.loaded_content["project_name"] 
 
 class ToDoListcard(MDCard):
     to_do_list_dialog = None
@@ -244,4 +256,22 @@ class ProjectListItem(OneLineListItem):
         self.card_called_from.parent.remove_widget(self.card_called_from)
         self.project_screen.ids.Container.add_widget(self.card_called_from)
         self.card_called_from.close_dialog()
+
+class LoadedToDoListCard(ToDoListcard):
+    def __init__(self, content, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.loaded_content = content
+        Clock.schedule_once(partial(self.apply_content))
+    
+    def apply_content(self, *largs):
+        self.ids.list_name_title.text = self.loaded_content["list_name"]
+        for i in self.loaded_content["list_items"]:
+            loaded_task = ListItemWithCheckbox(self, text = i["task"], secondary_text= i["deadline"])
+            if i["completed"] == "True":
+                loaded_task.ids.check.active = True
+                loaded_task.mark(loaded_task.ids.check, loaded_task)
+            self.ids.to_do_list.add_widget(loaded_task)
+            loaded_task.adjsut_list_height(loaded_task.height)
+    
+
 

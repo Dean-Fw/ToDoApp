@@ -1,3 +1,50 @@
 {
-    "lists": []
+    "screens": [
+        {
+            "name": "home",
+            "previous": "",
+            "cards":[
+                {
+                    "type":"note",
+                    "content":{
+                        "note_title":"Loaded Note",
+                        "note": "This note was loaded from json",
+                        "deadline": ""
+                    }
+                },
+                {
+                    "type":"image",
+                    "content":{
+                        "source": "/home/vboxuser/Pictures/index.png",
+                        "name": "index"
+                    }
+                },
+                {
+                    "type": "list",
+                    "content":{
+                        "list_name": "List 1",
+                        "list_items":[
+                            {
+                                "task": "task 1",
+                                "deadline": "12/12/12",
+                                "completed": "True"
+                            }
+                        ]
+
+                    }
+                },
+                {
+                    "type":"project",
+                    "content":{
+                        "project_name": "project 1"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "project 1",
+            "previous": "home",
+            "cards":[]
+        }
+    ]
 }
