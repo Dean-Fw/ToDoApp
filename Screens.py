@@ -27,12 +27,13 @@ class HomeScreen(MDScreen):
         self.menu = None
         self.dialog_box = None
         self.file_manager = None
-        self.json_obj = JsonData("data.json")
+        self.screen_data = JsonData("data.json").data["screens"][0]["cards"]
 
-        Clock.schedule_once(partial(self.load_items))
+
+        Clock.schedule_once(partial(self.load_items, self.screen_data))
     
-    def load_items(self, *largs):
-        for i in self.json_obj.data["screens"][0]["cards"]:
+    def load_items(self, screen_cards,*largs):
+        for i in screen_cards:
             if i["type"] == "note":
                 card_to_load = LoadedNoteCard(i["content"])
                 self.ids.Container.add_widget(card_to_load)
