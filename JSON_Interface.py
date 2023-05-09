@@ -28,6 +28,21 @@ class JsonData:
                 json.dump(self.data, f, indent = 4)
                 f.flush()
     
+    def append_new_card(self, position,new_list):
+        print(position)
+        self.data["screens"][position]["cards"].append(new_list)
+        self.save_changes("r+")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    '''OLD STUFF'''
     '''search methods'''
     # find lists in JSON file
     def find_list(self, target_list_name):

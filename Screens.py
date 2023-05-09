@@ -26,6 +26,7 @@ class HomeScreen(MDScreen):
     file_manager = None
     json_file = JsonData("data.json").data
     screen_data = json_file["screens"][0]["cards"]
+    screen_index = 0
     
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -99,12 +100,19 @@ class HomeScreen(MDScreen):
     def close_manager(self, *args):
         self.file_manager.close()
         self.file_manager = None
+    
     def select_path(self, path: str):
         if ".jpeg" or ".png" or ".jpeg" in path:
             new_card = ImageCard()
             new_card.ids.image_space.source = path
             new_card.ids.image_title.text = path
             self.ids.Container.add_widget(new_card)
+            
+            # append JSON file
+            json_obj = JsonData("data.json")
+            json_string = {"type":"image", "content":{"source":path,"name":path}}
+            json_obj.append_new_card(self.screen_index,json_string)
+        
         self.close_manager()
     # opens a dialog box to allow a user to 
     def open_create_project_dialog(self):
@@ -307,11 +315,10 @@ class LoadedProjectScreen(HomeScreen):
     def __init__(self, screen_name, previous_screen, *args, **kwargs):
         self.name = screen_name
         self.previous = previous_screen
-        self.screen_data = self.find_content()
-        print(previous_screen)
+        self.screen_data, self.screen_index = self.find_content()
         super().__init__(*args, **kwargs)
                 
     def find_content(self):
         for i in self.json_file["screens"]:
             if i["name"] == self.name:
-                return i["cards"]
+                return i["cards"], self.json_file["screens"].index(i)

@@ -3,40 +3,46 @@
         {
             "name": "home",
             "previous": "",
-            "cards":[
+            "cards": [
                 {
-                    "type":"note",
-                    "content":{
-                        "note_title":"Loaded Note",
+                    "type": "note",
+                    "content": {
+                        "note_title": "Loaded Note",
                         "note": "This note was loaded from json",
                         "deadline": ""
                     }
                 },
                 {
-                    "type":"image",
-                    "content":{
+                    "type": "image",
+                    "content": {
                         "source": "/home/vboxuser/Pictures/index.png",
                         "name": "index"
                     }
                 },
                 {
                     "type": "list",
-                    "content":{
+                    "content": {
                         "list_name": "List 1",
-                        "list_items":[
+                        "list_items": [
                             {
                                 "task": "task 1",
                                 "deadline": "12/12/12",
                                 "completed": "True"
                             }
                         ]
-
                     }
                 },
                 {
-                    "type":"project",
-                    "content":{
+                    "type": "project",
+                    "content": {
                         "project_name": "project 1"
+                    }
+                },
+                {
+                    "type": "image",
+                    "content": {
+                        "source": "/home/vboxuser/Pictures/index.png",
+                        "name": "/home/vboxuser/Pictures/index.png"
                     }
                 }
             ]
@@ -44,19 +50,18 @@
         {
             "name": "project 1",
             "previous": "home",
-            "cards":[
+            "cards": [
                 {
                     "type": "list",
-                    "content":{
+                    "content": {
                         "list_name": "List 1",
-                        "list_items":[
+                        "list_items": [
                             {
                                 "task": "task 1",
                                 "deadline": "12/12/12",
                                 "completed": "True"
                             }
                         ]
-
                     }
                 }
             ]
