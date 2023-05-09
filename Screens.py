@@ -21,15 +21,14 @@ from JSON_Interface import JsonData
 
 
 class HomeScreen(MDScreen):
-
+    menu = None
+    dialog_box = None
+    file_manager = None
+    json_file = JsonData("data.json").data
+    screen_data = json_file["screens"][0]["cards"]
+    
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.menu = None
-        self.dialog_box = None
-        self.file_manager = None
-        self.screen_data = JsonData("data.json").data["screens"][0]["cards"]
-
-
         Clock.schedule_once(partial(self.load_items, self.screen_data))
     
     def load_items(self, screen_cards,*largs):
@@ -45,7 +44,13 @@ class HomeScreen(MDScreen):
                 self.ids.Container.add_widget(card_to_load)
             elif i["type"] == "project":
                 card_to_load = LoadedProjectCard(i["content"])
+                app = MDApp.get_running_app()
+                screen_to_load = LoadedProjectScreen(i["content"]["project_name"], app.root.ids.screen_manager.current_screen)
+                
+                app.root.ids.screen_manager.add_widget(screen_to_load)
+                app.root.ids.nav_menu.add_widget(UserCreatedProjectListItem(text = i["content"]["project_name"]))
                 self.ids.Container.add_widget(card_to_load)
+
 
             
 
@@ -161,7 +166,7 @@ class CreateProjectDialog(MDBoxLayout):
         
         # check whether a screen already exists with the same name and show an error dialog if so
         if project_name not in app.root.ids.screen_manager.screen_names:
-            app.root.ids.screen_manager.add_widget(ProjectScreen(name = project_name))
+            app.root.ids.screen_manager.add_widget(ProjectScreen(app.root.ids.screen_manager.current_screen,name = project_name))
             self.screen_called_from.ids.Container.add_widget(new_project_card)
             if app.root.ids.topBar.title == "Home":
                 app.root.ids.nav_menu.add_widget(UserCreatedProjectListItem(text = project_name))
@@ -291,4 +296,22 @@ class CreateNoteDialog(MDBoxLayout):
         self.ids.date_text.text = str(date)
 
 class ProjectScreen(HomeScreen):
-    pass
+    def __init__(self, previous_screen,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.previous = previous_screen
+    
+    def load_items(self, screen_cards, *largs): # This is bad but it works ...
+        pass
+
+class LoadedProjectScreen(HomeScreen):
+    def __init__(self, screen_name, previous_screen, *args, **kwargs):
+        self.name = screen_name
+        self.previous = previous_screen
+        self.screen_data = self.find_content()
+        print(previous_screen)
+        super().__init__(*args, **kwargs)
+                
+    def find_content(self):
+        for i in self.json_file["screens"]:
+            if i["name"] == self.name:
+                return i["cards"]

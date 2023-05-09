@@ -44,7 +44,22 @@
         {
             "name": "project 1",
             "previous": "home",
-            "cards":[]
+            "cards":[
+                {
+                    "type": "list",
+                    "content":{
+                        "list_name": "List 1",
+                        "list_items":[
+                            {
+                                "task": "task 1",
+                                "deadline": "12/12/12",
+                                "completed": "True"
+                            }
+                        ]
+
+                    }
+                }
+            ]
         }
     ]
 }

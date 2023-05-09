@@ -1,6 +1,11 @@
 - Create method for deleting projects
+- Create previous button to take user up a level
+- implement functionality to move cards out a layer 
 - Implement storage
+	- Loading completed
+	- creating new data
+	- editing data
 - sort out image cards
 	- Title card the image name
-	- sort out the stretching issue
+
 
