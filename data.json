@@ -3,7 +3,21 @@
         {
             "name": "home",
             "previous": "",
-            "cards": []
+            "cards": [
+                {
+                    "type": "list",
+                    "content": {
+                        "list_name": "g",
+                        "list_items": [
+                            {
+                                "task_name": "d2",
+                                "completed": true,
+                                "task_date": "Tuesday 16 May 2023"
+                            }
+                        ]
+                    }
+                }
+            ]
         }
     ]
 }

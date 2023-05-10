@@ -29,8 +29,7 @@ class JsonData:
                 f.flush()
     
    
-   
-   
+    '''file appending methods'''
     def append_new_card(self, position,new_list):
         self.data["screens"][position]["cards"].append(new_list)
         self.save_changes("r+")
@@ -44,6 +43,15 @@ class JsonData:
         list_index = self.find_list_index(screen_index, list_name)
         self.data["screens"][screen_index]["cards"][list_index]["content"]["list_items"].append(new_task)
         self.save_changes("r+")
+
+    '''editing methods'''
+    def edit_task(self,screen_name,list_name,task_name, new_task):
+        screen_index = self.find_screen_index(screen_name)
+        list_index = self.find_list_index(screen_index, list_name)
+        task_index = self.find_task_index(screen_index, list_index,task_name)
+        print(task_index)
+        self.data["screens"][screen_index]["cards"][list_index]["content"]["list_items"][task_index] = new_task
+        self.save_changes("w")
 
     '''deletion methods'''
     def remove_note(self, screen_name, note_name):
@@ -161,10 +169,10 @@ class JsonData:
     #    del self.data["lists"][parent_list_index]["tasks"][task_index]
     #    self.save_changes("w")
     # find and edit task in list, then save to JSON
-    def edit_task(self, new_data ,task_to_edit, parent_list):
-        parent_list_index = self.find_list(parent_list)
-        task_index = self.find_task(task_to_edit, parent_list_index)
-
-        self.data["lists"][parent_list_index]["tasks"][task_index]["task_name"] = new_data[0]
-        self.data["lists"][parent_list_index]["tasks"][task_index]["task_date"] = new_data[1]
-        self.save_changes("w")
+    #def edit_task(self, new_data ,task_to_edit, parent_list):
+    #    parent_list_index = self.find_list(parent_list)
+    #    task_index = self.find_task(task_to_edit, parent_list_index)
+    #
+    #    self.data["lists"][parent_list_index]["tasks"][task_index]["task_name"] = new_data[0]
+    #    self.data["lists"][parent_list_index]["tasks"][task_index]["task_date"] = new_data[1]
+    #    self.save_changes("w")

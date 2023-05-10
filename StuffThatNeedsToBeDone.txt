@@ -3,8 +3,10 @@
 - implement functionality to move cards out a layer 
 - Implement storage
 	- editing data
-
-
+		- lists
+		- images
+		- notes
+	
 - sort out image cards
 	- Title card the image name
 

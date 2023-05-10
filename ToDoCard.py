@@ -152,6 +152,10 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         else:
             list_item.text = list_item.text.replace("[s]", "").replace("[/s]","") # remove strike through markup
     # Allows for the deletion of item upon clcking the "bin icon"
+        new_json_string = {"task_name": self.text.replace("[s]","").replace("[/s]",""), "completed": check.active, "task_date": self.secondary_text}
+        print(list_item.text)
+        JsonData("data.json").edit_task(MDApp.get_running_app().root.ids.screen_manager.current_screen.name,self.card_called_from.ids.list_name_title.text,self.text.replace("[s]","").replace("[/s]",""), new_json_string)
+    
     def delete_item(self, list_item):   
         JsonData("data.json").remove_task(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, 
                              self.card_called_from.ids.list_name_title.text, 
@@ -172,7 +176,7 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
             self.edit_task_dialog = MDDialog(
                 title="Edit a task",
                 type="custom",
-                content_cls=EditTaskDialog(self),
+                content_cls=EditTaskDialog(self, self.card_called_from),
                 auto_dismiss = False
             )
         self.edit_task_dialog.open()
@@ -186,16 +190,19 @@ class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
     pass
 
 class EditTaskDialog(MDBoxLayout):
-    def __init__(self, list_item,*args, **kwargs):
+    def __init__(self, list_item, card_called_from, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.item_to_edit = list_item
         self.ids.task_text.text = list_item.text
         self.ids.date_text.text = list_item.secondary_text
+        self.card = card_called_from
     
     def edit_task(self):
+        new_json_string = {"task_name": self.ids.task_text.text, "completed": self.item_to_edit.ids.check.active, "task_date":self.ids.date_text.text}
+        JsonData("data.json").edit_task(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.card.ids.list_name_title.text, self.item_to_edit.text, new_json_string)
         self.item_to_edit.text = self.ids.task_text.text
         self.item_to_edit.secondary_text = self.ids.date_text.text
-
+        
     def show_date_picker(self):
         date_dialog = MDDatePicker() #instantiate date picker widget
         date_dialog.bind(on_save=self.on_save) #bind the date picker to a function that saves content
@@ -275,7 +282,7 @@ class LoadedToDoListCard(ToDoListcard):
         self.ids.list_name_title.text = self.loaded_content["list_name"]
         for i in self.loaded_content["list_items"]:
             loaded_task = ListItemWithCheckbox(self, text = i["task_name"], secondary_text= i["task_date"])
-            if i["completed"] == "True":
+            if i["completed"] == True:
                 loaded_task.ids.check.active = True
                 loaded_task.mark(loaded_task.ids.check, loaded_task)
             self.ids.to_do_list.add_widget(loaded_task)
