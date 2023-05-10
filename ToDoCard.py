@@ -270,6 +270,7 @@ class ProjectListItem(OneLineListItem):
         self.card_called_from = card
 
     def move_list(self):
+        JsonData("data.json").move_list(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.card_called_from.ids.list_name_title.text, self.project_screen.name)
         self.card_called_from.parent.remove_widget(self.card_called_from)
         self.project_screen.ids.Container.add_widget(self.card_called_from)
         self.card_called_from.close_dialog()

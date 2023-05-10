@@ -106,8 +106,7 @@ class MoveImageDialog(MDBoxLayout):
         self.card_called_from.close_dialog()
 
     def create_new_project(self):
-        app = MDApp.get_running_app()
-        app.root.ids.screen_manager.current_screen.open_create_project_dialog()
+        MDApp.get_running_app().root.ids.screen_manager.current_screen.open_create_project_dialog()
         Clock.schedule_once(self.check_dialog_is_closed)
     
     def check_dialog_is_closed(self, dt):
@@ -127,6 +126,7 @@ class ProjectListItem(OneLineListItem):
         self.card_called_from = card
 
     def move_list(self):
+        JsonData("data.json").move_image(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.card_called_from.ids.image_title.text, self.project_screen.name)
         self.card_called_from.parent.remove_widget(self.card_called_from)
         self.project_screen.ids.Container.add_widget(self.card_called_from)
         self.card_called_from.close_dialog()   

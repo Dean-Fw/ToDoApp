@@ -44,6 +44,34 @@ class JsonData:
         self.data["screens"][screen_index]["cards"][list_index]["content"]["list_items"].append(new_task)
         self.save_changes("r+")
 
+    '''moving methods'''
+    def move_note(self, current_screen_name, note_name ,new_screen_name):
+        current_screen_index = self.find_screen_index(current_screen_name)
+        new_screen_index = self.find_screen_index(new_screen_name)
+        note_index = self.find_note_index(current_screen_index, note_name)
+        self.data["screens"][new_screen_index]["cards"].append(self.data["screens"][current_screen_index]["cards"][note_index])
+        del self.data["screens"][current_screen_index]["cards"][note_index]
+    
+        self.save_changes("r+")
+
+    def move_list(self, current_screen_name, list_name ,new_screen_name):
+        current_screen_index = self.find_screen_index(current_screen_name)
+        new_screen_index = self.find_screen_index(new_screen_name)
+        list_index = self.find_list_index(current_screen_index, list_name)
+        self.data["screens"][new_screen_index]["cards"].append(self.data["screens"][current_screen_index]["cards"][list_index])
+        del self.data["screens"][current_screen_index]["cards"][list_index]
+    
+        self.save_changes("r+")
+
+    def move_image(self, current_screen_name, image_name ,new_screen_name):
+        current_screen_index = self.find_screen_index(current_screen_name)
+        new_screen_index = self.find_screen_index(new_screen_name)
+        image_index = self.find_image_index(current_screen_index, image_name)
+        self.data["screens"][new_screen_index]["cards"].append(self.data["screens"][current_screen_index]["cards"][image_index])
+        del self.data["screens"][current_screen_index]["cards"][image_index]
+    
+        self.save_changes("r+")
+
     '''editing methods'''
     def edit_task(self,screen_name,list_name,task_name, new_task):
         screen_index = self.find_screen_index(screen_name)
