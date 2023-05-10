@@ -3,10 +3,7 @@
 	- and storing them changes 
 - Create previous button to take user up a level
 - implement functionality to move cards out a layer 
-- Implement storage
-	- editing data
-		- notes
-	
+
 - sort out image cards
 	- Title card the image name
 
