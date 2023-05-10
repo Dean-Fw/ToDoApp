@@ -11,6 +11,8 @@ from kivymd.uix.filemanager import MDFileManager
 from functools import partial
 import os
 
+from JSON_Interface import JsonData
+
 class ImageCard(MDCard):
     options_menu = None
     file_manager = None
@@ -44,6 +46,8 @@ class ImageCard(MDCard):
         self.options_menu.dismiss()
         self.options_menu = None
         self.parent.remove_widget(self)
+        JsonData("data.json").remove_image(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.ids.image_title.text)
+        
 
     def open_move_image_dialog(self):
         self.options_menu.dismiss()

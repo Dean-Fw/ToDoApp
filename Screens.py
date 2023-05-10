@@ -178,7 +178,6 @@ class CreateProjectDialog(MDBoxLayout):
         if project_name not in app.root.ids.screen_manager.screen_names:
             app.root.ids.screen_manager.add_widget(ProjectScreen(app.root.ids.screen_manager.current_screen, len(JsonData("data.json").data["screens"]),name = project_name))
             self.screen_called_from.ids.Container.add_widget(new_project_card)
-            print(self.screen_called_from.screen_index)
             
             json_string_card = {"type":"project", "content":{"project_name":project_name}}
             json_string_screen = {"name":project_name, "previous":app.root.ids.screen_manager.current_screen.name,"cards":[]}
@@ -229,6 +228,10 @@ class CreateListDialog(MDBoxLayout):
         # check whether a screen already exists with the same name and show an error dialog if so
         if len(list_name) > 0:
             self.screen_called_from.ids.Container.add_widget(new_list_card)
+
+            # append JSON file
+            json_string = {"type":"list", "content":{"list_name":list_name,"list_items":[]}}
+            JsonData("data.json").append_new_card(self.screen_called_from.screen_index, json_string)
         else:
             self.show_error_dialog("Error: Your To do list has no name!")
         
@@ -276,6 +279,10 @@ class CreateNoteDialog(MDBoxLayout):
         # check whether a screen already exists with the same name and show an error dialog if so
         if len(self.ids.note.text) > 0:
             self.origin_screen.ids.Container.add_widget(new_note_card)
+
+            # append to json
+            json_string = {"type":"note", "content":{"note_title":note_name, "note":self.ids.note.text, "deadline":self.ids.date_text.text}}
+            JsonData("data.json").append_new_card(self.origin_screen.screen_index, json_string)
         else:
             self.show_error_dialog("Error: Your note is empty!")
         

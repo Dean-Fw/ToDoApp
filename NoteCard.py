@@ -8,6 +8,8 @@ from kivy.clock import Clock
 from kivymd.uix.list import OneLineListItem
 from functools import partial
 
+from JSON_Interface import JsonData
+
 class NoteCard(MDCard):
     options_menu = None
     note_dialog = None
@@ -40,6 +42,7 @@ class NoteCard(MDCard):
         self.options_menu.dismiss()
         self.options_menu = None
         self.parent.remove_widget(self)
+        JsonData("data.json").remove_note(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.ids.note_title.text)
 
     def calculate_height(self):
         self.height = str(self.ids.note_title.height + self.ids.note.height+ 20) + "dp"

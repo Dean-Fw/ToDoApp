@@ -10,6 +10,8 @@ from kivy.clock import Clock
 
 from functools import partial
 
+from JSON_Interface import JsonData
+
 
 class ProjectCard(MDCard):
     pass
@@ -81,6 +83,7 @@ class ToDoListcard(MDCard):
     def delete_list(self):
         self.options_menu.dismiss()
         self.parent.remove_widget(self)
+        JsonData("data.json").remove_list(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.ids.list_name_title.text)
     
     def open_edit_list_dialog(self):
         self.options_menu.dismiss()
@@ -128,7 +131,7 @@ class CreateTaskDialog(MDBoxLayout):
         self.card_called_from.ids.to_do_list.add_widget(list_item)
         self.adjsut_list_height(self.card_called_from, list_item.height)
         task_json = {"task_name":task_name.text, "completed":False, "task_date": task_deadline.text}
-
+        JsonData("data.json").append_new_task(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.card_called_from.ids.list_name_title.text, task_json)
         task_name.text = ""
         task_deadline.text = ""
 
@@ -149,10 +152,15 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         else:
             list_item.text = list_item.text.replace("[s]", "").replace("[/s]","") # remove strike through markup
     # Allows for the deletion of item upon clcking the "bin icon"
-    def delete_item(self, list_item):
+    def delete_item(self, list_item):   
+        JsonData("data.json").remove_task(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, 
+                             self.card_called_from.ids.list_name_title.text, 
+                             self.text)
+        
         self.parent.remove_widget(list_item)
-        print(self.parent)
         self.adjsut_list_height(list_item.height)
+ 
+
     
     def adjsut_list_height(self, item_height):
         card = self.card_called_from
@@ -266,7 +274,7 @@ class LoadedToDoListCard(ToDoListcard):
     def apply_content(self, *largs):
         self.ids.list_name_title.text = self.loaded_content["list_name"]
         for i in self.loaded_content["list_items"]:
-            loaded_task = ListItemWithCheckbox(self, text = i["task"], secondary_text= i["deadline"])
+            loaded_task = ListItemWithCheckbox(self, text = i["task_name"], secondary_text= i["task_date"])
             if i["completed"] == "True":
                 loaded_task.ids.check.active = True
                 loaded_task.mark(loaded_task.ids.check, loaded_task)
