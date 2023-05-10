@@ -5,10 +5,11 @@
             "previous": "",
             "cards": [
                 {
-                    "type": "image",
+                    "type": "note",
                     "content": {
-                        "source": "/home/vboxuser/Pictures/index2.jpeg",
-                        "name": "/home/vboxuser/Pictures/index2.jpeg"
+                        "note_title": "Note 2 ",
+                        "note": "Note text 2 ",
+                        "deadline": "Wednesday 24 May 2023"
                     }
                 }
             ]

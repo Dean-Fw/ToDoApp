@@ -64,7 +64,14 @@ class JsonData:
         image_index = self.find_image_index(screen_index, image_name)
         self.data["screens"][screen_index]["cards"][image_index]["content"] = new_image
         self.save_changes("w")
-        
+
+    def edit_note(self,screen_name,note_name,new_note):
+        screen_index = self.find_screen_index(screen_name)
+        note_index = self.find_note_index(screen_index, note_name)
+        self.data["screens"][screen_index]["cards"][note_index]["content"] = new_note
+
+        self.save_changes("w")
+
     '''deletion methods'''
     def remove_note(self, screen_name, note_name):
         screen_index = self.find_screen_index(screen_name)

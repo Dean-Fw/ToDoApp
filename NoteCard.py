@@ -93,6 +93,8 @@ class EditNoteDialog(MDBoxLayout):
         self.ids.note.text = card.ids.note.text
     
     def edit_note(self):
+        new_json_string = {"note_title": self.ids.note_title_text.text, "note": self.ids.note.text, "deadline":self.ids.date_text.text}
+        JsonData("data.json").edit_note(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.note_to_edit.ids.note_title.text, new_json_string)
         self.note_to_edit.ids.note_title.text = self.ids.note_title_text.text
         self.note_to_edit.ids.note.text = self.ids.note.text
         self.note_to_edit.ids.deadline.text = self.ids.date_text.text
