@@ -5,16 +5,10 @@
             "previous": "",
             "cards": [
                 {
-                    "type": "list",
+                    "type": "image",
                     "content": {
-                        "list_name": "g",
-                        "list_items": [
-                            {
-                                "task_name": "d2",
-                                "completed": true,
-                                "task_date": "Tuesday 16 May 2023"
-                            }
-                        ]
+                        "source": "/home/vboxuser/Pictures/index2.jpeg",
+                        "name": "/home/vboxuser/Pictures/index2.jpeg"
                     }
                 }
             ]

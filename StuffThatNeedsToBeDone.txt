@@ -1,13 +1,21 @@
 - Create method for deleting projects
+- create method for editing projects 
+	- and storing them changes 
 - Create previous button to take user up a level
 - implement functionality to move cards out a layer 
 - Implement storage
 	- editing data
-		- lists
-		- images
 		- notes
 	
 - sort out image cards
 	- Title card the image name
 
+DISS:
+
+Talk about honing into one feature
+search is bad
+	- find better examples
+
+talk design and imp of JSON 
+BUILD TIME WOOOOOOOOO (not)
 

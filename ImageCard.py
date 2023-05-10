@@ -81,6 +81,8 @@ class ImageCard(MDCard):
     
     def select_path(self, path: str):
         if ".jpeg" or ".png" or ".jpeg" in path:
+            new_image_json = {"source": path, "name": path}
+            JsonData("data.json").edit_image(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.ids.image_title.text, new_image_json)
             self.ids.image_space.source = path
             self.ids.image_title.text = path
         self.close_manager()

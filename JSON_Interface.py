@@ -49,10 +49,22 @@ class JsonData:
         screen_index = self.find_screen_index(screen_name)
         list_index = self.find_list_index(screen_index, list_name)
         task_index = self.find_task_index(screen_index, list_index,task_name)
-        print(task_index)
         self.data["screens"][screen_index]["cards"][list_index]["content"]["list_items"][task_index] = new_task
         self.save_changes("w")
 
+    def edit_list(self, screen_name, list_name, new_list):
+        screen_index = self.find_screen_index(screen_name)
+        list_index = self.find_list_index(screen_index, list_name)
+        print(list_index)
+        self.data["screens"][screen_index]["cards"][list_index]["content"]["list_name"] = new_list
+        self.save_changes("w")
+    
+    def edit_image(self,screen_name,image_name,new_image):
+        screen_index = self.find_screen_index(screen_name)
+        image_index = self.find_image_index(screen_index, image_name)
+        self.data["screens"][screen_index]["cards"][image_index]["content"] = new_image
+        self.save_changes("w")
+        
     '''deletion methods'''
     def remove_note(self, screen_name, note_name):
         screen_index = self.find_screen_index(screen_name)

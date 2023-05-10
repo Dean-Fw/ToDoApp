@@ -223,8 +223,10 @@ class EditListDialog(MDBoxLayout):
         self.ids.list_name_input.text = card.ids.list_name_title.text
     
     def edit_list(self):
+        JsonData("data.json").edit_list(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.list_to_edit.ids.list_name_title.text, self.ids.list_name_input.text)
         self.list_to_edit.ids.list_name_title.text = self.ids.list_name_input.text
-    
+        
+
     def close_dialog(self):
         self.list_to_edit.close_dialog()
 
