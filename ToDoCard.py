@@ -156,10 +156,10 @@ class ListItemWithCheckbox(TwoLineAvatarIconListItem):
         print(list_item.text)
         JsonData("data.json").edit_task(MDApp.get_running_app().root.ids.screen_manager.current_screen.name,self.card_called_from.ids.list_name_title.text,self.text.replace("[s]","").replace("[/s]",""), new_json_string)
     
-    def delete_item(self, list_item):   
+    def delete_item(self, list_item): 
         JsonData("data.json").remove_task(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, 
                              self.card_called_from.ids.list_name_title.text, 
-                             self.text)
+                             self.text.replace("[s]","").replace("[/s]",""))
         
         self.parent.remove_widget(list_item)
         self.adjsut_list_height(list_item.height)

@@ -154,6 +154,7 @@ class JsonData:
     
     def find_task_index(self, screen_index, list_index, task_name):
         for i in self.data["screens"][screen_index]["cards"][list_index]["content"]["list_items"]:
+            print("json: " + i["task_name"] + " app: " + task_name) 
             if task_name == i["task_name"]:
                 return self.data["screens"][screen_index]["cards"][list_index]["content"]["list_items"].index(i)
     
