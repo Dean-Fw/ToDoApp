@@ -1,24 +1,11 @@
-<ContentNavigationDrawer>:
-    MDList:
-
-        OneLineIconListItem:
-            text: "Home"
-            on_press:
-                root.nav_drawer.set_state("close")
-                root.screen_manager.current = "HomeScreen"
-				app.root.ids.topBar.title = "Home"
-			IconLeftWidgetWithoutTouch:
-        		icon: "home"
-
-        OneLineIconListItem:
-            text: "ToDo Lists"
-            on_press:
-                root.nav_drawer.set_state("close")
-                root.screen_manager.current = "ToDoListFeature"
-				app.root.ids.topBar.title = "Your ToDo Lists"
-			
-			IconLeftWidgetWithoutTouch:
-        		icon: "format-list-bulleted"
+<UserCreatedProjectListItem>:
+    icon: "folder"
+    text: ""
+    color: 1,1,1,1
+    on_release:
+        app.root.ids.nav_drawer.set_state("close")
+        app.root.ids.screen_manager.current = self.text
+        app.root.ids.topBar.title = self.text
 
 MDScreen:
 
@@ -33,114 +20,102 @@ MDScreen:
 
         MDScreenManager:
             id: screen_manager
-
             HomeScreen:
-				id: HomeScreen
-                name: "HomeScreen"
-
-            ToDoListView:
-				id: ToDoListView
-				screen_manager: screen_manager
-                name: "ToDoListFeature"
+                name: "home"
 
         MDNavigationDrawer:
             id: nav_drawer
             radius: (0, 16, 16, 0)
 
-            ContentNavigationDrawer:
-                screen_manager: screen_manager
-                nav_drawer: nav_drawer
+            MDNavigationDrawerMenu:
+                id: nav_menu
+                MDNavigationDrawerHeader:
+                    title: "Note Taking app"
+                    text: "Navigation Menu"
+                    spacing: "4dp"
 
-# HomeScreen Styling
+                MDNavigationDrawerItem:
+                    icon: "home"
+                    text: "Home"
+                    on_press:
+                        app.root.ids.nav_drawer.set_state("close")
+			    	    app.root.ids.topBar.title = "Home"
+                        app.root.ids.screen_manager.current = "home"
+
+                MDNavigationDrawerDivider:
+
+                MDNavigationDrawerLabel:
+                    text: "Your Projects:"
+
+                MDNavigationDrawerItem:
+                    icon: "plus-thick"
+                    text: "Create a Project"
+                    on_release:
+                        app.root.ids.screen_manager.get_screen("home").open_create_project_dialog()
+                        app.root.ids.nav_drawer.set_state("close")
+
+
+
+# Home screen styling
 <HomeScreen>:
-	MDBoxLayout:
-		orientation: "vertical"
-		Widget:
-			size_hint: 1, .1
-		ScrollView:
-			pos_hint: {"center_y": .5, "center_x": .5}
-			size_hint: .9, .8
-			id: scroll_view
-			MDList:
-				id: home_list
-				FavouriteSpace:
+    
+    MDBoxLayout:
+        
+        orientation: "vertical"
 
-<FavouriteSpace>:
-	
-	padding: "5dp"
-	size_hint_y: None
-	MDCard:
-		on_release: 
-			app.root.ids.screen_manager.current = "ToDoListFeature"
-			app.root.ids.topBar.title = "Your ToDo lists"
-		md_bg_color: "#2894f4"
-		MDBoxLayout:
-			padding: "10dp"
-			orientation: "vertical"
-			MDLabel:
-				markup: True
-				text: "[b][u]Favourited Lists:[/b][/u]"
-				font_size: "25dp"	
-				sapcing: "10dp"
-				size_hint: 1, .2
-				pos_hint: {"top": 0.1}
-			MDList:
-				id: space_for_cards
-				size_hint: 1,.8
+        Widget:
+            size_hint: 1, None
+            height: "10dp"
 
+        MDFloatLayout:	
+	    	ScrollView:
+	    		pos_hint: {"center_y": .5, "center_x": .5}
+	    		size_hint: .9, .8
 
-<ListCard>:
-	padding: "5dp"
-	size_hint_y: None
-	height: "100dp"
-	MDCard:
-		on_release: 
-			app.root.ids.screen_manager.current = list_name.text
-			app.root.ids.screen_manager.get_screen(list_name.text).previous = "HomeScreen"
-			app.root.ids.topBar.title = list_name.text
-		padding: "10dp"
-		MDBoxLayout:
-			orientation: "vertical"
-			MDLabel:
-				markup: True
-				font_size: "20dp"
-				id: list_name
-			MDLabel:
-				markup: True
-				font_size: "15dp"
-				id: list_count
-				pos_hint:{"x": .01}
-			MDLabel:
-				markup: True
-				font_size: "15dp"
-				id: total_complete
-				pos_hint:{"x": .01}
-			
-# ToDo List view Styling
-<ToDoListView>:
-	MDFloatLayout:	
-		ScrollView:
-			pos_hint: {"center_y": .5, "center_x": .5}
-			size_hint: .9, .8
-	
-			MDList:
-				id: Container
-			
-		MDFloatingActionButton:
-			icon: "plus-thick"
-			on_release: root.show_task_dialog(root.screen_manager)
-			elevation_noraml: 10
-			pos_hint: {"x": .85, "y":.05}
+	    		MDList:
+	    			id: Container
+                    spacing: "5dp"
+    
+	    	MDFloatingActionButton:
+                id: plus_button
+	    		icon: "plus-thick"
+	    		elevation_noraml: 10
+	    		pos_hint: {"x": .85, "y":.05}
+                on_release: root.open_dropdown_menu()
 
-<CreateListDialog>:
-	orientation: "vertical"
+# Dialog box stylings
+<CreateProjectDialog>:
+    orientation: "vertical"
 	padding: "5dp"
 	size_hint: 1, None
 	height: "130dp"
 
 	MDTextField:
-		id: list_text
-		hint_text: "Name ToDo list..."
+		id: project_name_input
+		hint_text: "Name of Project"
+		pos_hint: {"center_y": .4}
+        max_text_length: 50
+
+	BoxLayout:
+        orientation: 'horizontal'
+
+        MDRaisedButton:
+            id: save_button
+            text: "SAVE"
+            on_release: (root.create_project(), root.dismiss_self())
+        MDFlatButton:
+            text: 'DISCARD'
+            on_release: root.dismiss_self()
+
+<CreateListDialog>:
+    orientation: "vertical"
+	padding: "5dp"
+	size_hint: 1, None
+	height: "130dp"
+
+	MDTextField:
+		id: list_name_input
+		hint_text: "Name To do list..."
 		pos_hint: {"center_y": .4}
         max_text_length: 50
 
@@ -149,80 +124,12 @@ MDScreen:
 
         MDRaisedButton:
             text: "SAVE"
-            on_release: (root.screen_manager.get_screen("ToDoListFeature").add_task(list_text), root.screen_manager.get_screen("ToDoListFeature").close_dialog())
+            on_release: (root.create_to_do_list(), root.dismiss_self())
         MDFlatButton:
-            text: 'CANCEL'
-            on_release: root.screen_manager.get_screen("ToDoListFeature").close_dialog()
+            text: 'DISCARD'
+            on_release: root.dismiss_self()
 
-<ListItemWithoutCheckbox>:
-	id: list_item
-	IconLeftWidget:
-		id: star
-		icon: "star-outline"
-		theme_text_color: "Custom"
-		text_color: 33,150,243,1
-		on_release:
-			root.favourite_list()
-
-	IconRightWidget:
-		icon: "trash-can-outline"
-		theme_text_color: "Custom"
-		text_color: 1,0,0,1
-		on_release:
-			root.delete_item()
-
-# Individual ToDo List Styling
-<ListItemWithCheckbox>:
-	id: list_item
-	markup: True
-	on_release: app.root.ids.screen_manager.current_screen.open_edit_dialog(self)
-	LeftCheckbox:
-		id: check
-		on_release:
-			root.mark(check, list_item)
-	
-	IconRightWidget:
-		icon: "trash-can-outline"
-		theme_text_color: "Custom"
-		text_color: 1,0,0,1
-		on_release:
-			root.delete_item(list_item)
-
-<CreatedToDoListPage>:
-	MDFloatLayout:
-
-		ScrollView:
-			pos_hint: {"center_y": .5, "center_x": .5}
-			size_hint: .9, .8
-
-			MDList:
-				id: Container
-
-		MDRectangleFlatIconButton:
-			icon: "keyboard-backspace"
-			text: "Return to Previous screen"
-			pos_hint: {"x": .05, "y":.05}
-			on_release: 
-				app.root.ids.screen_manager.current = root.go_to_previous_screen()
-
-		MDFloatingActionButton:
-			icon: "plus-thick"
-
-			on_release: root.show_task_dialog(app.root.ids.screen_manager)
-			elevation_noraml: 10
-			pos_hint: {"x": .85, "y":.05}
-
-<SaveEditedTaskButton>:
-	id: save_button
-    text: "SAVE"
-    on_release: (root.parent.parent.edit_task(), app.root.ids.screen_manager.current_screen.close_dialog())
-        
-<SaveNewTaskButton>:
-	id: save_button
-	text: "SAVE"
-	on_release: (root.parent.parent.add_task(), app.root.ids.screen_manager.current_screen.close_dialog())
-
-<DialogContent>:
+<CreateTaskDialog>:
     orientation: "vertical"
     sapcing: "20dp"
     size_hint: 1, None
@@ -246,6 +153,315 @@ MDScreen:
 	BoxLayout:
 		id: save_or_exit
         orientation: 'horizontal'
-		MDFlatButton:
-            text: 'CANCEL'
-            on_release: app.root.ids.screen_manager.current_screen.close_dialog()
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: root.add_task(), root.close_dialog()
+    	MDFlatButton:
+            text: 'DISCARD'
+            on_release: root.close_dialog()
+
+<EditTaskDialog>:
+    orientation: "vertical"
+    sapcing: "20dp"
+    size_hint: 1, None
+    height: "200dp"
+
+    MDTextField:
+        id: task_text
+        hint_text: "Add Task..."
+        pos_hint: {"center_y": .4}
+        max_text_length: 50
+	
+	BoxLayout:
+		orientation: "vertical"
+    	MDRectangleFlatIconButton:
+			icon: 'calendar'
+    	    text: 'Add a Deadline'
+    	    on_release: root.show_date_picker()
+    	MDLabel:
+			spacing: "10dp"
+    	    id: date_text
+	BoxLayout:
+		id: save_or_exit
+        orientation: 'horizontal'
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: root.edit_task(), root.close_dialog()
+    	MDFlatButton:
+            text: 'DISCARD'
+            on_release: root.close_dialog()
+
+<EditListDialog>:
+    orientation: "vertical"
+	padding: "5dp"
+	size_hint: 1, None
+	height: "130dp"
+
+	MDTextField:
+		id: list_name_input
+		hint_text: "Name To do list..."
+		pos_hint: {"center_y": .4}
+        max_text_length: 50
+
+	BoxLayout:
+        orientation: 'horizontal'
+
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: (root.edit_list(), root.close_dialog())
+        MDFlatButton:
+            text: 'DISCARD'
+            on_release: root.close_dialog()
+
+<MoveListDialog>:
+    orientation: "vertical"
+    padding: "5dp"
+    size_hint: 1, None
+	height: "200dp"
+    MDScrollView:
+        MDList:
+            id: list_of_projects
+            OneLineListItem:
+                text: "Create new project"
+                on_release: 
+                    root.create_new_project()
+    MDFlatButton:
+        text: 'CANCEL'
+        on_release: root.close_dialog()
+
+<ProjectListItem>:
+    on_press: root.move_list()
+
+<CreateNoteDialog>:
+    orientation: "vertical"
+    sapcing: "20dp"
+    size_hint: 1, None
+    height: "250dp"
+
+    MDTextField:
+        id: note_title_text
+        hint_text: "Note Title"
+        pos_hint: {"center_y": .4}
+        max_text_length: 50
+	
+    MDTextField:
+        id: note
+        hint_text: "Type your note here..."
+        pos_hint: {"center_y": .4}
+        max_text_length: 250
+
+	BoxLayout:
+		orientation: "vertical"
+    	MDRectangleFlatIconButton:
+			icon: 'calendar'
+    	    text: 'Add a Deadline'
+    	    on_release: root.show_date_picker()
+    	MDLabel:
+			spacing: "10dp"
+    	    id: date_text
+	BoxLayout:
+		id: save_or_exit
+        orientation: 'horizontal'
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: root.create_note(), root.close_dialog()
+    	MDFlatButton:
+            text: 'DISCARD'
+            on_release: root.close_dialog()
+
+<EditNoteDialog>:
+    orientation: "vertical"
+    sapcing: "20dp"
+    size_hint: 1, None
+    height: "250dp"
+
+    MDTextField:
+        id: note_title_text
+        hint_text: "Note Title"
+        pos_hint: {"center_y": .4}
+        max_text_length: 50
+	
+    MDTextField:
+        id: note
+        hint_text: "Type your note here..."
+        pos_hint: {"center_y": .4}
+        max_text_length: 250
+
+	BoxLayout:
+		orientation: "vertical"
+    	MDRectangleFlatIconButton:
+			icon: 'calendar'
+    	    text: 'Add a Deadline'
+    	    on_release: root.show_date_picker()
+    	MDLabel:
+			spacing: "10dp"
+    	    id: date_text
+	BoxLayout:
+		id: save_or_exit
+        orientation: 'horizontal'
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: root.edit_note(), root.close_dialog()
+    	MDFlatButton:
+            text: 'DISCARD'
+            on_release: root.close_dialog()
+
+<MoveNoteDialog>:
+    orientation: "vertical"
+    padding: "5dp"
+    size_hint: 1, None
+	height: "200dp"
+    MDScrollView:
+        MDList:
+            id: list_of_projects
+            OneLineListItem:
+                text: "Create new project"
+                on_release: 
+                    root.create_new_project()
+    MDFlatButton:
+        text: 'CANCEL'
+        on_release: root.close_dialog()
+
+<MoveImageDialog>:
+    orientation: "vertical"
+    padding: "5dp"
+    size_hint: 1, None
+	height: "200dp"
+    MDScrollView:
+        MDList:
+            id: list_of_projects
+            OneLineListItem:
+                text: "Create new project"
+                on_release: 
+                    root.create_new_project()
+    MDFlatButton:
+        text: 'CANCEL'
+        on_release: root.close_dialog()
+
+# Card Stylings
+<ProjectCard>:
+    id: project_card
+    padding: "10dp"
+    size_hint: 1, None
+    height: "75dp"
+    md_bg_color: "#2894f4"
+    on_release: 
+        app.root.ids.screen_manager.current = project_title.text
+        app.root.ids.topBar.title = project_title.text
+    MDRelativeLayout:
+
+        MDIconButton:
+            icon: "chevron-right"
+            pos_hint: {"right": 1, "center_y": 0.5}
+
+        MDLabel:
+            id: project_title
+            font_size: "25dp"
+            spacing:"10dp"
+            bold: True
+
+<ToDoListcard>:
+    id: to_do_list_card
+    padding: "10dp"
+    size_hint: 1, None
+    height: "75dp"
+    md_bg_color: "#2894f4"
+    MDBoxLayout:
+        size_hint_y: .2
+        orientation: "vertical"
+        MDGridLayout:
+            cols: 2 
+            MDLabel:
+                id: list_name_title
+                font_size: "25dp"
+                bold: True
+            MDBoxLayout:
+                size_hint_x: .15
+                MDIconButton:
+                    id: options_button
+                    on_release: root.open_drop_menu()
+                    icon: "dots-horizontal"
+                MDIconButton:
+                    icon: "plus-thick"
+                    on_release: root.show_create_task_dialog()
+        
+        MDList:
+			id: to_do_list
+		
+
+<ListItemWithCheckbox>:
+	id: list_item
+	markup: True
+	on_release: root.open_edit_task_dialog()
+	LeftCheckbox:
+		id: check
+		on_release:
+			root.mark(check, list_item)
+	
+	IconRightWidget:
+		icon: "trash-can-outline"
+		theme_text_color: "Custom"
+		text_color: 1,0,0,1
+		on_release:
+			root.delete_item(list_item)
+
+<NoteCard>:
+    id: note_card
+    padding: "10dp"
+    size_hint: 1, None
+    height: "75dp"
+    md_bg_color: "#2894f4"
+    on_release: root.open_edit_note_dialog()
+    MDBoxLayout:
+        orientation: "vertical"
+        MDGridLayout:
+            size_hint_y: .2
+            pos_hint: {"top": 1}
+            cols: 2 
+            MDLabel:
+                id: note_title
+                font_size: "25dp"
+                bold: True
+            MDIconButton:
+                size_hint_x: .1
+                id: options_button
+                on_release: root.open_drop_menu()
+                icon: "dots-horizontal"
+        MDLabel:
+			id: note
+            font_size: "18dp"
+        MDGridLayout:
+            pos_hint: {"center_y": 1}
+            size_hint_y: .4
+            cols: 2
+            MDIconButton:
+                id: notification_button
+                on_release: root.show_date_picker()
+                icon: "bell"
+            MDLabel:
+                id: deadline
+
+<ImageCard>:
+    md_bg_color: "#2894f4"
+    size_hint: 1, None
+    height: "200dp"
+    MDBoxLayout:
+        orientation: "vertical"
+        MDGridLayout:
+            size_hint_y: .2
+            pos_hint: {"top": 1}
+            cols: 2 
+            MDLabel:
+                id: image_title
+                font_size: "25dp"
+                bold: True
+            MDIconButton:
+                pos_hint: {"right": 1}
+                size_hint_x: .1
+                id: options_button
+                on_release: root.open_drop_menu()
+                icon: "dots-horizontal"
+        Image:
+            id: image_space
+            allow_stretch: False
+            keep_ratio: True    

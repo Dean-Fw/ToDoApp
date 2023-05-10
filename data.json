@@ -1,3 +1,9 @@
 {
-    "lists": []
+    "screens": [
+        {
+            "name": "home",
+            "previous": "",
+            "cards": []
+        }
+    ]
 }
