@@ -70,7 +70,7 @@ class ToDoListcard(MDCard):
             menu_items.append({
                 "text": f"Move list to previous screen",
                 "viewclass": "OneLineListItem",
-                "on_release": lambda x=f"Add List to a project": self.open_move_list_dialog(),
+                "on_release": lambda x=f"Add List to a project": self.move_list_to_previous_screen(),
             })
 
         self.options_menu = MDDropdownMenu(
@@ -106,6 +106,9 @@ class ToDoListcard(MDCard):
                 auto_dismiss = False
             )
         self.to_do_list_dialog.open()
+    
+    def move_list_to_previous_screen(self):
+        JsonData("data.json").move_list(MDApp.get_running_app().root.ids.screen_manager.current_screen.name, self.ids.list_name_title.text, MDApp.get_running_app().root.ids.screen_manager.current_screen.previous.name)
 
 class CreateTaskDialog(MDBoxLayout):
     def __init__(self, card, *args, **kwargs):

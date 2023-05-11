@@ -3,6 +3,39 @@
         {
             "name": "home",
             "previous": "",
+            "cards": [
+                {
+                    "type": "project",
+                    "content": {
+                        "project_name": "Project 1"
+                    }
+                },
+                {
+                    "type": "note",
+                    "content": {
+                        "note_title": "Note ",
+                        "note": "goop",
+                        "deadline": "Wednesday 31 May 2023"
+                    }
+                },
+                {
+                    "type": "list",
+                    "content": {
+                        "list_name": "list 3",
+                        "list_items": [
+                            {
+                                "task_name": "Thes ",
+                                "completed": true,
+                                "task_date": ""
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Project 1",
+            "previous": "home",
             "cards": []
         }
     ]

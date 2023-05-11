@@ -24,17 +24,19 @@ class HomeScreen(MDScreen):
     menu = None
     dialog_box = None
     file_manager = None
+    screen_index = 0
     json_file = JsonData("data.json").data
     screen_data = json_file["screens"][0]["cards"]
-    screen_index = 0
-    
-    
+   
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
         Clock.schedule_once(partial(self.load_items, self.screen_data))
     
+    # method to load cards from JSON 
     def load_items(self, screen_cards,*largs):
+        # loop through all cards 
         for i in screen_cards:
+            # check type and load their content and add them to screen
             if i["type"] == "note":
                 card_to_load = LoadedNoteCard(i["content"])
                 self.ids.Container.add_widget(card_to_load)
@@ -44,13 +46,12 @@ class HomeScreen(MDScreen):
             elif i["type"] == "list":
                 card_to_load = LoadedToDoListCard(i["content"])
                 self.ids.Container.add_widget(card_to_load)
+            # in the case of projects add a load the content of the project to another screen. 
             elif i["type"] == "project":
                 card_to_load = LoadedProjectCard(i["content"])
-                app = MDApp.get_running_app()
-                screen_to_load = LoadedProjectScreen(i["content"]["project_name"], app.root.ids.screen_manager.current_screen)
-                
-                app.root.ids.screen_manager.add_widget(screen_to_load)
-                app.root.ids.nav_menu.add_widget(UserCreatedProjectListItem(text = i["content"]["project_name"]))
+                screen_to_load = LoadedProjectScreen(i["content"]["project_name"], MDApp.get_running_app().root.ids.screen_manager.current_screen)
+                MDApp.get_running_app().root.ids.screen_manager.add_widget(screen_to_load)
+                MDApp.get_running_app().root.ids.nav_menu.add_widget(UserCreatedProjectListItem(text = i["content"]["project_name"]))
                 self.ids.Container.add_widget(card_to_load)
 
 

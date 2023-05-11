@@ -84,6 +84,7 @@ class NoteCard(MDCard):
     def on_save(self, instance, value, date_range):
         date = value.strftime("%A %d %B %Y") 
         self.ids.deadline.text = str(date)
+        # need to save to json
 
 class EditNoteDialog(MDBoxLayout):
     def __init__(self, card,*args, **kwargs):
@@ -163,9 +164,9 @@ class LoadedNoteCard(NoteCard):
         super().__init__(*args, **kwargs)
         Clock.schedule_once(partial(self.apply_content))
         self.loaded_content = content
+        self.calculate_height()
         
     def apply_content (self, *largs):
         self.ids.note_title.text = self.loaded_content["note_title"]
         self.ids.note.text = self.loaded_content["note"]
         self.ids.deadline.text = self.loaded_content["deadline"]
-        self.calculate_height()

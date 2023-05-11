@@ -30,8 +30,8 @@ class JsonData:
     
    
     '''file appending methods'''
-    def append_new_card(self, position,new_list):
-        self.data["screens"][position]["cards"].append(new_list)
+    def append_new_card(self, position,new_card):
+        self.data["screens"][position]["cards"].append(new_card)
         self.save_changes("r+")
     
     def append_new_screen(self,new_screen):
@@ -83,7 +83,6 @@ class JsonData:
     def edit_list(self, screen_name, list_name, new_list):
         screen_index = self.find_screen_index(screen_name)
         list_index = self.find_list_index(screen_index, list_name)
-        print(list_index)
         self.data["screens"][screen_index]["cards"][list_index]["content"]["list_name"] = new_list
         self.save_changes("w")
     
@@ -154,9 +153,13 @@ class JsonData:
     
     def find_task_index(self, screen_index, list_index, task_name):
         for i in self.data["screens"][screen_index]["cards"][list_index]["content"]["list_items"]:
-            print("json: " + i["task_name"] + " app: " + task_name) 
             if task_name == i["task_name"]:
                 return self.data["screens"][screen_index]["cards"][list_index]["content"]["list_items"].index(i)
+            
+    def find_card_index(self, screen_index, type, target_card_name):
+        for i in self.data["screens"][screen_index]["cards"]:
+            if i["type"] == type[0] and i["content"][type[1]] == target_card_name:
+                return self.data["screens"][screen_index]["cards"].index(i)
     
     
     
